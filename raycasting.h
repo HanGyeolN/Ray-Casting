@@ -15,7 +15,10 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+# include <math.h>
 # include "mlx.h"
+
+# define PI 3.14159265
 
 typedef struct	s_window
 {
@@ -29,9 +32,18 @@ typedef struct	s_ray
 {
 	double	pos_x;
 	double	pos_y;
-	double	deg_x;
-	double	deg_y;
 	double	rad;
+	double	dydx;
 }				t_ray;
+
+typedef struct		s_map
+{
+	double	width;
+	double	height;
+	char	map[5][7];
+}					t_map;
+
+void	render_ray(t_window *window, t_ray *ray);
+int		render_map(t_window *window, t_map *map);
 
 #endif
