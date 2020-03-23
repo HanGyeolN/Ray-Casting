@@ -9,50 +9,87 @@ int		is_ray_inf(t_ray *ray)
 	return(0);
 }
 
-int		line_put(t_window *w, t_ray *ray, double x, double y)
+int		line_put(t_window *w, t_ray *ray, double x, double y, t_map *map)
 {
 	double		ty;
 
 	if (is_ray_inf(ray))
 	{
-		while (y >= 0 && y < w->height)
+		while (map->map[(int)(y / map->block_h)][(int)(x / map->block_w)] != '1')
 		{
-			mlx_pixel_put(w->mlx_ptr, w->win_ptr, (int)x, (int)y, 0xFFFFFF);
+			mlx_pixel_put(w->mlx_ptr, w->win_ptr, (int)x, (int)y, ray->color);
 			y += ray->dydx;
 		}
 		return (1);
 	}
-	if (ray->dydx > 1.0 || ray->dydx < -1.0)
+	if (ray->dydx > 1.0 && ray->rad <= 90)
 	{
-		if (ray->dydx > 0)
-			ty = ray->dydx * ((x - 1.0) - ray->pos_x) + ray->pos_y;
-		else
-			ty = ray->dydx * ((x + 1.0) - ray->pos_x) + ray->pos_y;
-		while (++ty < y)
-			mlx_pixel_put(w->mlx_ptr, w->win_ptr, (int)x, (int)ty, 0xFFFFFF);
+		ty = ray->dydx * ((x + 1) - ray->pos_x) + ray->pos_y;
+		while (++y < ty && map->map[(int)(y / map->block_h)][(int)(x / map->block_w)] != '1')
+			mlx_pixel_put(w->mlx_ptr, w->win_ptr, (int)x, (int)y, ray->color);
+	}
+	else if (ray->dydx < -1.0 && ray->rad <= 180)
+	{
+		ty = ray->dydx * ((x - 1) - ray->pos_x) + ray->pos_y;
+		while (++y < ty && map->map[(int)(y / map->block_h)][(int)(x / map->block_w)] != '1')
+			mlx_pixel_put(w->mlx_ptr, w->win_ptr, (int)x, (int)y, ray->color);
+	}
+	else if (ray->dydx > 1.0 && ray->rad <= 270)
+	{
+		ty = ray->dydx * ((x - 1) - ray->pos_x) + ray->pos_y;
+		while (--y > ty && map->map[(int)(y / map->block_h)][(int)(x / map->block_w)] != '1')
+			mlx_pixel_put(w->mlx_ptr, w->win_ptr, (int)x, (int)y, ray->color);
+	}
+	else if (ray->dydx < -1.0 && ray->rad <= 360)
+	{
+		ty = ray->dydx * ((x + 1) - ray->pos_x) + ray->pos_y;
+		while (--y > ty && map->map[(int)(y / map->block_h)][(int)(x / map->block_w)] != '1')
+			mlx_pixel_put(w->mlx_ptr, w->win_ptr, (int)x, (int)y, ray->color);
 	}
 	else
-		mlx_pixel_put(w->mlx_ptr, w->win_ptr, (int)x, (int)y, 0xFFFFFF);
+		mlx_pixel_put(w->mlx_ptr, w->win_ptr, (int)x, (int)y, ray->color);
 	return (0);
 }
 
-void	render_ray(t_window *window, t_ray *ray)
+void	render_ray(t_window *window, t_ray *ray, t_map *map)
 {
+	double		dx;
 	double		x;
 	double		y;
-	
-	x = (double)ray->pos_x;
-	y = (double)ray->pos_y;
-	while ((x >= 0 && x < window->width) && (y >= 0 && y < window->height))
+
+	x = ray->pos_x;
+	y = ray->pos_y;
+	dx = (ray->rad >= 90 && ray->rad <= 270) ? -1 : 1;
+	if (is_ray_inf(ray))
+		line_put(window, ray, x, y, map);
+	else
 	{
-		if (!(is_ray_inf(ray)))
+		while (map->map[(int)(y / map->block_h)][(int)(x / map->block_w)] != '1')
+		{
+			line_put(window, ray, x, y, map);
 			y = ray->dydx * (x - ray->pos_x) + ray->pos_y;
-		if (line_put(window, ray ,x, y) == 1)
-			break;
-		if (ray->rad >= 90 && ray->rad <= 270)
-			x--;
-		else
-			x++;
+			x += dx;
+		}
+	}
+}
+
+void	render_block(t_window *window, t_map *map, int x, int y)
+{
+	int		i;
+	int		j;
+
+	i = -1;
+	while (++i < map->block_w)
+	{
+		j = -1;
+		while (++j < map->block_h)
+		{
+			mlx_pixel_put(window->mlx_ptr, 
+						  window->win_ptr, 
+						  x * map->block_w + i,
+						  y * map->block_h + j,
+						  map->color);
+		}
 	}
 }
 
@@ -62,13 +99,13 @@ int		render_map(t_window *window, t_map *map)
 	int		y;
 
 	x = -1;
-	while (++x < window->width)
+	while (++x < map->width)
 	{
 		y = -1;
-		while (++y < window->height)
+		while (++y < map->height)
 		{
-			if (map->map[(int)(y / (window->height / map->height))][(int)(x / (window->width / map->width))] == '1')
-				mlx_pixel_put(window->mlx_ptr, window->win_ptr, x, y, 0xFFFFFF);
+			if (map->map[y][x] == '1')
+				render_block(window, map, x, y);
 		}
 	}
 	return (0);
