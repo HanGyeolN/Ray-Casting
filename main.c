@@ -11,8 +11,10 @@
 /* ************************************************************************** */
 
 #include "raycasting.h"
+#include <math.h>
 #include "stdio.h"
 #include <string.h>
+#define PI 3.14159265
 
 typedef struct		s_map
 {
@@ -71,15 +73,45 @@ void	init_window(t_window *window, int width, int height, char *title)
 
 void	init_ray(t_ray *ray)
 {
-	ray->pos_x = 150;
-	ray->pos_y = 150;
-	ray->deg_x = 0;
-	ray->deg_y = 1;
+	ray->pos_x = 300.0;
+	ray->pos_y = 300.0;
+	ray->rad = 90.0;
+	if (ray->rad == 90.0)
+		ray->deg_y = 1024;
+	else
+		ray->deg_y = tan(ray->rad * PI / 180.0);
+	ray->deg_x = 1;
 }
 
 void	render_ray(t_window *window, t_ray *ray)
 {
-	mlx_pixel_put(window->mlx_ptr, window->win_ptr, ray->pos_x, ray->pos_y, 0xFFFFFF);
+	double		x;
+	double		y;
+	double		temp_y;
+	double		dydx;
+
+	x = (double)ray->pos_x;
+	y = (double)ray->pos_y;
+	dydx = ray->deg_y / ray->deg_x;
+	while ((x >= 0 && x < window->width) && (y >= 0 && y < window->height))
+	{
+		y = dydx * (x - ray->pos_x) + ray->pos_y;
+		if (dydx > 1.0 || dydx < -1.0)
+		{
+			if (dydx > 0)
+				temp_y = dydx * ((x - 1.0) - ray->pos_x) + ray->pos_y;
+			else
+				temp_y = dydx * ((x + 1.0) - ray->pos_x) + ray->pos_y;
+			while (temp_y < y)
+			{
+				mlx_pixel_put(window->mlx_ptr, window->win_ptr, (int)x, (int)temp_y, 0xFFFFFF);
+				temp_y++;
+			}
+		}
+		else
+			mlx_pixel_put(window->mlx_ptr, window->win_ptr, (int)x, (int)y, 0xFFFFFF);
+		x++;
+	}
 }
 
 int		main(void)
@@ -90,7 +122,7 @@ int		main(void)
 
 	if (!(window = malloc(sizeof(t_window))) || !(map = malloc(sizeof(t_map))))
 		return (0);
-	init_window(window, 200, 200, "title_test");
+	init_window(window, 400, 400, "title_test");
 	init_map(map);
 	init_ray(&ray);
 	render_map(window, map);

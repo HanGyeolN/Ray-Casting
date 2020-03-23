@@ -31,6 +31,7 @@ typedef struct	s_ray
 	double	pos_y;
 	double	deg_x;
 	double	deg_y;
+	double	rad;
 }				t_ray;
 
 #endif
