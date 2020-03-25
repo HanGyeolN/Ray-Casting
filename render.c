@@ -1,5 +1,6 @@
 #include "raycasting.h"
 #include <stdio.h>
+
 int		is_ray_inf(t_ray *ray)
 {
 	if (ray->rad >= 88 && ray->rad <= 92)
@@ -13,11 +14,20 @@ int		is_hit(t_ray *ray, double x, double y, t_map *map)
 {
 	if (map->map[(int)(y / map->block_h)][(int)(x / map->block_w)] == '1')
 	{
+		
 		ray->hit_x = x;
 		ray->hit_y = y;
-		ray->dist = pow(ray->hit_x - ray->pos_x, 2);
-		ray->dist += pow(ray->hit_y - ray->pos_y, 2);
+		ray->dist = (ray->hit_x - ray->pos_x) * (ray->hit_x - ray->pos_x);
+		ray->dist += (ray->hit_y - ray->pos_y) * (ray->hit_y - ray->pos_y);
 		ray->dist = sqrt(ray->dist);
+		printf("val: %f", ray->dist);
+		// if (map->map[(int)(y / map->block_h)][(int)((x - 1)/ map->block_w)] == '0' || 
+		// 	map->map[(int)(y / map->block_h)][(int)((x + 1)/ map->block_w)] == '0')
+		// 	ray->dist = sin((ray->rad * PI / 180.0) - (player.rad * PI / 180.0)) * ray->dist;
+		// else
+		ray->dist = cos((ray->rad * PI / 180.0) - (player.rad * PI / 180.0)) * ray->dist;
+		printf(", cos: %f -> %f\n", cos((ray->rad * PI / 180.0) - (player.rad * PI / 180.0)), ray->dist);
+		printf("angle: %f, %f \n", ray->rad, player.rad);
 		return (1);
 	}
 	return (0);
@@ -27,8 +37,8 @@ int		line_put(t_window *w, t_ray *ray, t_map *map)
 {
 	double		ty;
 	double		dx;
-	double		x;
-	double		y;
+	int			x;
+	int			y;
 
 	x = ray->pos_x;
 	y = ray->pos_y;
@@ -38,10 +48,15 @@ int		line_put(t_window *w, t_ray *ray, t_map *map)
 		while (!is_hit(ray, x, y, map))
 		{
 			ty = ray->dydx * ((x + 1) - ray->pos_x) + ray->pos_y;
-			while (++y < ty && !is_hit(ray, x, y, map))
+			while (y < ty)
+			{
+				if (is_hit(ray, x, y, map))
+					return (0);
 				mlx_pixel_put(w->mlx_ptr, w->win_ptr, (int)x, (int)y, ray->color);
-			y = ray->dydx * (x - ray->pos_x) + ray->pos_y;
+				y++;
+			}
 			x += dx;
+			y = ray->dydx * (x - ray->pos_x) + ray->pos_y;
 		}
 	}
 	else if (ray->dydx < -1.0 && ray->rad <= 180)
@@ -49,10 +64,15 @@ int		line_put(t_window *w, t_ray *ray, t_map *map)
 		while (!is_hit(ray, x, y, map))
 		{
 			ty = ray->dydx * ((x - 1) - ray->pos_x) + ray->pos_y;
-			while (++y < ty && !is_hit(ray, x, y, map))
+			while (y < ty)
+			{
+				if (is_hit(ray, x, y, map))
+					return (0);
 				mlx_pixel_put(w->mlx_ptr, w->win_ptr, (int)x, (int)y, ray->color);
-			y = ray->dydx * (x - ray->pos_x) + ray->pos_y;
+				y++;
+			}
 			x += dx;
+			y = ray->dydx * (x - ray->pos_x) + ray->pos_y;
 		}
 	}
 	else if (ray->dydx > 1.0 && ray->rad <= 270)
@@ -60,10 +80,15 @@ int		line_put(t_window *w, t_ray *ray, t_map *map)
 		while (!is_hit(ray, x, y, map))
 		{
 			ty = ray->dydx * ((x - 1) - ray->pos_x) + ray->pos_y;
-			while (--y > ty && !is_hit(ray, x, y, map))
+			while (y > ty)
+			{
+				if (is_hit(ray, x, y, map))
+					return (0);
 				mlx_pixel_put(w->mlx_ptr, w->win_ptr, (int)x, (int)y, ray->color);
-			y = ray->dydx * (x - ray->pos_x) + ray->pos_y;
+				y--;
+			}
 			x += dx;
+			y = ray->dydx * (x - ray->pos_x) + ray->pos_y;
 		}
 	}
 	else if (ray->dydx < -1.0 && ray->rad <= 360)
@@ -71,10 +96,15 @@ int		line_put(t_window *w, t_ray *ray, t_map *map)
 		while (!is_hit(ray, x, y, map))
 		{
 			ty = ray->dydx * ((x + 1) - ray->pos_x) + ray->pos_y;
-			while (--y > ty && !is_hit(ray, x, y, map))
+			while (y > ty)
+			{
+				if (is_hit(ray, x, y, map))
+					return (0);
 				mlx_pixel_put(w->mlx_ptr, w->win_ptr, (int)x, (int)y, ray->color);
-			y = ray->dydx * (x - ray->pos_x) + ray->pos_y;
+				y--;
+			}
 			x += dx;
+			y = ray->dydx * (x - ray->pos_x) + ray->pos_y;
 		}
 	}
 	else
@@ -82,18 +112,19 @@ int		line_put(t_window *w, t_ray *ray, t_map *map)
 		while (!is_hit(ray, x, y, map))
 		{
 			mlx_pixel_put(w->mlx_ptr, w->win_ptr, (int)x, (int)y, ray->color);
-			y = ray->dydx * (x - ray->pos_x) + ray->pos_y;
 			x += dx;
+			y = ray->dydx * (x - ray->pos_x) + ray->pos_y;
 		}
 	}
 	return (0);
 }
 
-void	render_wall(t_window *window, t_ray *ray, int i)
+void	render_wall(t_window *window, t_ray *ray, int i, char mode)
 {
 	int		j;
 	int		y;
 	int		ray_w;
+	double	wall_h;
 	double	color;
 	double	color_q;
 	double	max_len;
@@ -101,19 +132,22 @@ void	render_wall(t_window *window, t_ray *ray, int i)
 	j = -1;
 	ray_w = (int)(window->gw / N_RAY);
 	max_len = sqrt(pow(window->width, 2) + pow(window->height, 2));
-	color_q = 0x0000FF / max_len;
+	color_q = 0x0000FF / (max_len / 1.5);
 	color = 0xFFFFFF;
 	color -= (int)(color_q * ray->dist);
 	color -= 16 * 16 * (int)(color_q * ray->dist);
 	color -= 16 * 16 * 16 * 16 * (int)(color_q * ray->dist);
+	if (mode == 'd')
+		color = 0x000000;
+	wall_h = (window->height / (ray->dist / 7));
 	while (++j < ray_w)
 	{
-		y = -1;
-		while (++y < window->height)
+		y = (int)round((window->height / 2.0) - (wall_h / 2.0));
+		while (++y < (int)round((window->height / 2.0) + (wall_h / 2.0)))
 		{
 			mlx_pixel_put(window->mlx_ptr, 
 						window->win_ptr,
-						(ray_w * i) + j + window->width, 
+						((ray_w * i) + j + window->width), 
 						y,
 						color);
 		}
