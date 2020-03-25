@@ -23,32 +23,42 @@
 # define KEY_A 0
 # define KEY_S 1
 # define KEY_D 2
+# define N_RAY 36
 
-typedef struct	s_pos
+typedef struct		s_pos
 {
 	double	x;
 	double	y;
-}				t_pos;
+}					t_pos;
 
-typedef struct	s_window
+typedef struct		s_window
 {
 	double	width;
 	double	height;
 	void	*win_ptr;
 	void	*mlx_ptr;
-}				t_window;
+	double	gw;
+	double	gh;
+}					t_window;
 
-typedef struct	s_ray
+typedef struct		s_ray
 {
 	double	pos_x;
 	double	pos_y;
 	double	rad;
 	double	dydx;
 	int		color;
-	int		hit;
 	double	hit_x;
 	double	hit_y;
-}				t_ray;
+	double	dist;
+}					t_ray;
+
+typedef struct		s_player
+{
+	double	pos_x;
+	double	pos_y;
+	t_ray	rays[N_RAY];
+}					t_player;
 
 typedef struct		s_map
 {
@@ -62,5 +72,6 @@ typedef struct		s_map
 
 void	render_ray(t_window *window, t_ray *ray, t_map *map);
 int		render_map(t_window *window, t_map *map);
+void	render_wall(t_window *window, t_ray *ray, int i);
 
 #endif
