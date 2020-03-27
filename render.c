@@ -128,6 +128,8 @@ void	render_wall(t_window *window, t_ray *ray, int i, char mode)
 	double	color;
 	double	color_q;
 	double	max_len;
+	int		size;
+	void	*img_ptr;
 	
 	j = -1;
 	ray_w = (int)(window->gw / N_RAY);
@@ -140,6 +142,10 @@ void	render_wall(t_window *window, t_ray *ray, int i, char mode)
 	if (mode == 'd')
 		color = 0x000000;
 	wall_h = (window->height / (ray->dist / 7));
+	img_ptr = mlx_png_file_to_image(window->mlx_ptr, 
+				"./wall1.png", 
+				&size, 
+				&size);
 	while (++j < ray_w)
 	{
 		y = (int)round((window->height / 2.0) - (wall_h / 2.0));
@@ -174,31 +180,23 @@ void	render_ray(t_window *window, t_ray *ray, t_map *map)
 		line_put(window, ray, map);
 }
 
-void	render_block(t_window *window, t_map *map, int x, int y)
+void	render_block(t_window *window, t_map *map, int x, int y, void *img_ptr)
 {
-	int		i;
-	int		j;
-
-	i = -1;
-	while (++i < map->block_w)
-	{
-		j = -1;
-		while (++j < map->block_h)
-		{
-			mlx_pixel_put(window->mlx_ptr, 
-						  window->win_ptr, 
-						  x * map->block_w + i,
-						  y * map->block_h + j,
-						  map->color);
-		}
-	}
+	mlx_put_image_to_window(window->mlx_ptr, window->win_ptr, img_ptr, x * map->block_w, y * map->block_h);	
 }
 
 int		render_map(t_window *window, t_map *map)
 {
 	int		x;
 	int		y;
+	void	*img_ptr;
+	int		size;
 
+	img_ptr = mlx_png_file_to_image(window->mlx_ptr, 
+				"./Image003.png", 
+				&size, 
+				&size);
+	printf("block:%d %d\n", map->block_w, map->block_h);
 	x = -1;
 	while (++x < map->width)
 	{
@@ -206,7 +204,7 @@ int		render_map(t_window *window, t_map *map)
 		while (++y < map->height)
 		{
 			if (map->map[y][x] == '1')
-				render_block(window, map, x, y);
+				render_block(window, map, x, y, img_ptr);
 		}
 	}
 	return (0);

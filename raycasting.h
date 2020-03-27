@@ -68,8 +68,8 @@ typedef struct		s_map
 {
 	double	width;
 	double	height;
-	double	block_w;
-	double	block_h;
+	int		block_w;
+	int		block_h;
 	int		color;
 	char	map[10][11];
 }					t_map;

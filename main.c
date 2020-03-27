@@ -19,8 +19,8 @@ void	init_map(t_map *map)
 	map->width = 10;
 	map->height = 10;
 	map->color = 0xFFFFFF;
-	map->block_w = (window->width / map->width);
-	map->block_h = (window->height / map->height);
+	map->block_w = (int)(window->width / map->width);
+	map->block_h = (int)(window->height / map->height);
 	strcpy(map->map[0], "1111111111");
 	strcpy(map->map[1], "1001000001");
 	strcpy(map->map[2], "1001111101");
