@@ -20,14 +20,14 @@ int		is_hit(t_ray *ray, double x, double y, t_map *map)
 		ray->dist = (ray->hit_x - ray->pos_x) * (ray->hit_x - ray->pos_x);
 		ray->dist += (ray->hit_y - ray->pos_y) * (ray->hit_y - ray->pos_y);
 		ray->dist = sqrt(ray->dist);
-		printf("val: %f", ray->dist);
+		// printf("val: %f", ray->dist);
 		// if (map->map[(int)(y / map->block_h)][(int)((x - 1)/ map->block_w)] == '0' || 
 		// 	map->map[(int)(y / map->block_h)][(int)((x + 1)/ map->block_w)] == '0')
 		// 	ray->dist = sin((ray->rad * PI / 180.0) - (player.rad * PI / 180.0)) * ray->dist;
 		// else
 		ray->dist = cos((ray->rad * PI / 180.0) - (player.rad * PI / 180.0)) * ray->dist;
-		printf(", cos: %f -> %f\n", cos((ray->rad * PI / 180.0) - (player.rad * PI / 180.0)), ray->dist);
-		printf("angle: %f, %f \n", ray->rad, player.rad);
+		// printf(", cos: %f -> %f\n", cos((ray->rad * PI / 180.0) - (player.rad * PI / 180.0)), ray->dist);
+		// printf("angle: %f, %f \n", ray->rad, player.rad);
 		return (1);
 	}
 	return (0);
@@ -52,7 +52,7 @@ int		line_put(t_window *w, t_ray *ray, t_map *map)
 			{
 				if (is_hit(ray, x, y, map))
 					return (0);
-				mlx_pixel_put(w->mlx_ptr, w->win_ptr, (int)x, (int)y, ray->color);
+				img_data1[(int)y * (int)window->width + (int)x] = ray->color;
 				y++;
 			}
 			x += dx;
@@ -68,7 +68,7 @@ int		line_put(t_window *w, t_ray *ray, t_map *map)
 			{
 				if (is_hit(ray, x, y, map))
 					return (0);
-				mlx_pixel_put(w->mlx_ptr, w->win_ptr, (int)x, (int)y, ray->color);
+				img_data1[(int)y * (int)window->width + (int)x] = ray->color;
 				y++;
 			}
 			x += dx;
@@ -84,7 +84,7 @@ int		line_put(t_window *w, t_ray *ray, t_map *map)
 			{
 				if (is_hit(ray, x, y, map))
 					return (0);
-				mlx_pixel_put(w->mlx_ptr, w->win_ptr, (int)x, (int)y, ray->color);
+				img_data1[(int)y * (int)window->width + (int)x] = ray->color;
 				y--;
 			}
 			x += dx;
@@ -100,7 +100,7 @@ int		line_put(t_window *w, t_ray *ray, t_map *map)
 			{
 				if (is_hit(ray, x, y, map))
 					return (0);
-				mlx_pixel_put(w->mlx_ptr, w->win_ptr, (int)x, (int)y, ray->color);
+				img_data1[(int)y * (int)window->width + (int)x] = ray->color;
 				y--;
 			}
 			x += dx;
@@ -111,7 +111,7 @@ int		line_put(t_window *w, t_ray *ray, t_map *map)
 	{
 		while (!is_hit(ray, x, y, map))
 		{
-			mlx_pixel_put(w->mlx_ptr, w->win_ptr, (int)x, (int)y, ray->color);
+			img_data1[(int)y * (int)window->width + (int)x] = ray->color;
 			x += dx;
 			y = ray->dydx * (x - ray->pos_x) + ray->pos_y;
 		}
@@ -142,22 +142,16 @@ void	render_wall(t_window *window, t_ray *ray, int i, char mode)
 	if (mode == 'd')
 		color = 0x000000;
 	wall_h = (window->height / (ray->dist / 7));
-	img_ptr = mlx_png_file_to_image(window->mlx_ptr, 
-				"./wall1.png", 
-				&size, 
-				&size);
 	while (++j < ray_w)
 	{
 		y = (int)round((window->height / 2.0) - (wall_h / 2.0));
-		while (++y < (int)round((window->height / 2.0) + (wall_h / 2.0)))
+		while (y < (int)round((window->height / 2.0) + (wall_h / 2.0)))
 		{
-			mlx_pixel_put(window->mlx_ptr, 
-						window->win_ptr,
-						((ray_w * i) + j + window->width), 
-						y,
-						color);
+			img_data2[y * (int)window->width + ((ray_w * i) + j)] = color;
+			y++;
 		}
 	}
+	mlx_put_image_to_window(window->mlx_ptr, window->win_ptr, img_ptr2, (int)window->width, 0);
 }
 
 void	render_ray(t_window *window, t_ray *ray, t_map *map)
@@ -172,31 +166,41 @@ void	render_ray(t_window *window, t_ray *ray, t_map *map)
 	{
 		while (!is_hit(ray, x, y, map))
 		{
-			mlx_pixel_put(window->mlx_ptr, window->win_ptr, (int)x, (int)y, ray->color);
+			img_data1[(int)y * (int)window->width + (int)x] = ray->color;
 			y += ray->dydx;
 		}
 	}
 	else 
 		line_put(window, ray, map);
+	mlx_put_image_to_window(window->mlx_ptr, window->win_ptr, img_ptr1, 0, 0);
 }
 
-void	render_block(t_window *window, t_map *map, int x, int y, void *img_ptr)
+void	render_block(t_window *window, t_map *map, int x, int y)
 {
-	mlx_put_image_to_window(window->mlx_ptr, window->win_ptr, img_ptr, x * map->block_w, y * map->block_h);	
+	int		i;
+	int		j;
+
+	i = 0;
+	while (i < map->block_w)
+	{
+		j = 0;
+		while (j < map->block_h)
+		{
+			//printf("%d\n", (map->block_h * y + j));
+			//printf("%d\n", (int)(window->width));
+			//printf("%d\n", (map->block_w * x + i));
+			img_data1[(map->block_h * y + j) * (int)window->width + (map->block_w * x + i)] = 0xFFFFFF;
+			j++;
+		}
+		i++;
+	}
 }
 
 int		render_map(t_window *window, t_map *map)
 {
 	int		x;
 	int		y;
-	void	*img_ptr;
-	int		size;
 
-	img_ptr = mlx_png_file_to_image(window->mlx_ptr, 
-				"./Image003.png", 
-				&size, 
-				&size);
-	printf("block:%d %d\n", map->block_w, map->block_h);
 	x = -1;
 	while (++x < map->width)
 	{
@@ -204,8 +208,9 @@ int		render_map(t_window *window, t_map *map)
 		while (++y < map->height)
 		{
 			if (map->map[y][x] == '1')
-				render_block(window, map, x, y, img_ptr);
+				render_block(window, map, x, y);
 		}
 	}
+	mlx_put_image_to_window(window->mlx_ptr, window->win_ptr, img_ptr1, 0, 0);
 	return (0);
 }

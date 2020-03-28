@@ -7,18 +7,16 @@ int		main(void)
 	void	*mlx_ptr;
 	void	*win_ptr;
 	void	*img_ptr;
-	char	*img_data;
+	int		*img_data;
 
 	i = 0;
 	mlx_ptr = mlx_init();
 	win_ptr = mlx_new_window(mlx_ptr, 1000, 1000, "test");
 	img_ptr = mlx_new_image(mlx_ptr, 1000, 1000);
-	img_data = mlx_get_data_addr(img_ptr, &bpx, &sl, &en);
-	while (++i < 1000000)
+	img_data = (int *)mlx_get_data_addr(img_ptr, &bpx, &sl, &en);
+	while (++i < 505000)
 	{
-		img_data[4 * i] = 255;
-		img_data[4 * i + 1] = 255;
-		img_data[4 * i + 2] = 255;
+		img_data[i] = 0xFFFFFF;
 	}
 	mlx_put_image_to_window(mlx_ptr, win_ptr, img_ptr, 0, 0);
 

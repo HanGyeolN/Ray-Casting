@@ -13,6 +13,7 @@
 #include "raycasting.h"
 #include "stdio.h"
 #include <string.h>
+#define WIDTH 500
 
 void	init_map(t_map *map)
 {
@@ -79,6 +80,8 @@ int		deal_key(int key, void *param)
 			(player.rays[i]).rad += temp;
 			if ((player.rays[i]).rad >= 360.0)
 				(player.rays[i]).rad -= 360.0;
+			else if ((player.rays[i]).rad <= 0.0)
+				(player.rays[i]).rad += 360.0;
 			if ((player.rays[i]).rad >= 88 && (player.rays[i]).rad <= 92)
 				(player.rays[i]).dydx = 1;
 			else if ((player.rays[i]).rad >= 268 && (player.rays[i]).rad <= 272)
@@ -94,7 +97,7 @@ int		deal_key(int key, void *param)
 		render_ray(window, &(player.rays[i]), map);
 		render_wall(window, &(player.rays[i]), i, 'a');
 	}
-	printf("%d\n", key);
+	//printf("%d\n", key);
 	return (0);
 }
 
@@ -143,20 +146,27 @@ void	init_player(t_player *player, int x, int y)
 int		main(void)
 {
 	int			i;
+	int			bpx, sl, en;
 
 	i = 0;
+	
 	if (!(window = malloc(sizeof(t_window))) || 
 		!(map = malloc(sizeof(t_map))))
 		return (0);
-	init_window(window, 300, 300, "title_test", 300);
+	init_window(window, WIDTH, WIDTH, "title_test", WIDTH);
 	init_map(map);
+	img_ptr1 = mlx_new_image(window->mlx_ptr, WIDTH, WIDTH);
+	img_data1 = (int *)mlx_get_data_addr(img_ptr1, &bpx, &sl, &en);
+	img_ptr2 = mlx_new_image(window->mlx_ptr, WIDTH, WIDTH);
+	img_data2 = (int *)mlx_get_data_addr(img_ptr2, &bpx, &sl, &en);
 	render_map(window, map);
-	init_player(&player, 200, 150);
+	init_player(&player, (int)((WIDTH * 2) / 3), (int)(WIDTH / 2));
+	
 	while (i < N_RAY)
 	{
 		render_ray(window, &(player.rays[i]), map);
-		printf("ray %2d ", i);
-		printf("hit: (%f, %f)\n", player.rays[i].hit_x, player.rays[i].hit_y);
+		//printf("ray %2d ", i);
+		//printf("hit: (%f, %f)\n", player.rays[i].hit_x, player.rays[i].hit_y);
 		i++;
 	}
 	i = 0;

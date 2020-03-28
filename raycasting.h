@@ -25,7 +25,7 @@
 # define KEY_D 2
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
-# define N_RAY 36
+# define N_RAY 150
 
 typedef struct		s_pos
 {
@@ -77,6 +77,10 @@ typedef struct		s_map
 t_window	*window;
 t_map		*map;
 t_player	player;
+void		*img_ptr1;
+int			*img_data1;
+void		*img_ptr2;
+int			*img_data2;
 
 void	render_ray(t_window *window, t_ray *ray, t_map *map);
 int		render_map(t_window *window, t_map *map);
