@@ -27,12 +27,6 @@
 # define KEY_RIGHT 124
 # define N_RAY 150
 
-typedef struct		s_pos
-{
-	double	x;
-	double	y;
-}					t_pos;
-
 typedef struct		s_window
 {
 	double	width;
@@ -85,5 +79,6 @@ int			*img_data2;
 void	render_ray(t_window *window, t_ray *ray, t_map *map);
 int		render_map(t_window *window, t_map *map);
 void	render_wall(t_window *window, t_ray *ray, int i, char mode);
+void	render(void);
 
 #endif

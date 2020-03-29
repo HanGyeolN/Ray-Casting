@@ -13,7 +13,7 @@
 #include "raycasting.h"
 #include "stdio.h"
 #include <string.h>
-#define WIDTH 500
+#define WIDTH 1000
 
 void	init_map(t_map *map)
 {
@@ -97,7 +97,7 @@ int		deal_key(int key, void *param)
 		render_ray(window, &(player.rays[i]), map);
 		render_wall(window, &(player.rays[i]), i, 'a');
 	}
-	//printf("%d\n", key);
+	render();
 	return (0);
 }
 
@@ -161,12 +161,9 @@ int		main(void)
 	img_data2 = (int *)mlx_get_data_addr(img_ptr2, &bpx, &sl, &en);
 	render_map(window, map);
 	init_player(&player, (int)((WIDTH * 2) / 3), (int)(WIDTH / 2));
-	
 	while (i < N_RAY)
 	{
 		render_ray(window, &(player.rays[i]), map);
-		//printf("ray %2d ", i);
-		//printf("hit: (%f, %f)\n", player.rays[i].hit_x, player.rays[i].hit_y);
 		i++;
 	}
 	i = 0;
@@ -175,6 +172,7 @@ int		main(void)
 		render_wall(window, &(player.rays[i]), i, 'a');
 		i++;
 	}
+	render();
 	mlx_key_hook(window->win_ptr, deal_key, (void *)0);
 	mlx_loop(window->mlx_ptr);
 }

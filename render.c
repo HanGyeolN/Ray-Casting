@@ -151,7 +151,6 @@ void	render_wall(t_window *window, t_ray *ray, int i, char mode)
 			y++;
 		}
 	}
-	mlx_put_image_to_window(window->mlx_ptr, window->win_ptr, img_ptr2, (int)window->width, 0);
 }
 
 void	render_ray(t_window *window, t_ray *ray, t_map *map)
@@ -172,7 +171,6 @@ void	render_ray(t_window *window, t_ray *ray, t_map *map)
 	}
 	else 
 		line_put(window, ray, map);
-	mlx_put_image_to_window(window->mlx_ptr, window->win_ptr, img_ptr1, 0, 0);
 }
 
 void	render_block(t_window *window, t_map *map, int x, int y)
@@ -211,6 +209,11 @@ int		render_map(t_window *window, t_map *map)
 				render_block(window, map, x, y);
 		}
 	}
-	mlx_put_image_to_window(window->mlx_ptr, window->win_ptr, img_ptr1, 0, 0);
 	return (0);
+}
+
+void	render(void)
+{
+	mlx_put_image_to_window(window->mlx_ptr, window->win_ptr, img_ptr1, 0, 0);
+	mlx_put_image_to_window(window->mlx_ptr, window->win_ptr, img_ptr2, (int)window->width, 0);
 }
