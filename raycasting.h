@@ -25,7 +25,15 @@
 # define KEY_D 2
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
-# define N_RAY 150
+# define N_RAY 100
+
+# define WIDTH 800
+# define HEIGHT 600
+# define MAP_VIEW_W 100
+# define MAP_VIEW_H 100
+
+# define SPEED_MOVE 1
+# define SPEED_ROT 2
 
 typedef struct		s_window
 {
@@ -65,8 +73,20 @@ typedef struct		s_map
 	int		block_w;
 	int		block_h;
 	int		color;
-	char	map[10][11];
+	char	**map;
 }					t_map;
+
+typedef struct		s_texture
+{
+	void	*n;
+	void	*s;
+	void	*w;
+	void	*e;
+	int		*n_data;
+	int		*s_data;
+	int		*w_data;
+	int		*e_data;
+}					t_texture;
 
 t_window	*window;
 t_map		*map;
@@ -76,9 +96,11 @@ int			*img_data1;
 void		*img_ptr2;
 int			*img_data2;
 
+int		is_ray_inf(t_ray *ray);
 void	render_ray(t_window *window, t_ray *ray, t_map *map);
 int		render_map(t_window *window, t_map *map);
 void	render_wall(t_window *window, t_ray *ray, int i, char mode);
 void	render(void);
+char	**make_map(char *filename, t_map *map_info);
 
 #endif

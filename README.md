@@ -1,6 +1,6 @@
 
 ## Compile
-  ```gcc *.c -I minilibx_opengl_20191021 -L minilibx_opengl_20191021 -lmlx -framework OpenGL -framework AppKit```
+  ```gcc main.c render.c parse_map.c -I includes -L ./ -lmlx -lft -framework OpenGL -framework AppKit -lz```
 
 
 
