@@ -18,6 +18,8 @@
 # include <math.h>
 # include "mlx.h"
 
+# define TEXTURE_SIZE 50
+
 # define PI 3.14159265
 # define KEY_W 13
 # define KEY_A 0
@@ -25,12 +27,12 @@
 # define KEY_D 2
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
-# define N_RAY 100
+# define N_RAY 800
 
 # define WIDTH 800
 # define HEIGHT 600
-# define MAP_VIEW_W 100
-# define MAP_VIEW_H 100
+# define MAP_VIEW_W 500
+# define MAP_VIEW_H 500
 
 # define SPEED_MOVE 1
 # define SPEED_ROT 2
@@ -95,6 +97,8 @@ void		*img_ptr1;
 int			*img_data1;
 void		*img_ptr2;
 int			*img_data2;
+void		*tx_img;
+int			(*tx_data)[TEXTURE_SIZE];
 
 int		is_ray_inf(t_ray *ray);
 void	render_ray(t_window *window, t_ray *ray, t_map *map);

@@ -14,9 +14,16 @@ int		is_hit(t_ray *ray, double x, double y, t_map *map)
 {
 	if (map->map[(int)(y / map->block_h)][(int)(x / map->block_w)] == '1')
 	{
-		
 		ray->hit_x = x;
 		ray->hit_y = y;
+		if ((int)ray->hit_x % map->block_h == map->block_h - 1)
+			ray->side = 0;
+		else if ((int)ray->hit_y % map->block_w == map->block_w - 1)
+			ray->side = 0;
+		else if ((int)ray->hit_x % map->block_h == 0)
+			ray->side = 0;
+		else if ((int)ray->hit_y % map->block_w == 0)
+			ray->side = 0;
 		ray->dist = (ray->hit_x - ray->pos_x) * (ray->hit_x - ray->pos_x);
 		ray->dist += (ray->hit_y - ray->pos_y) * (ray->hit_y - ray->pos_y);
 		ray->dist = sqrt(ray->dist);
@@ -123,6 +130,8 @@ void	render_wall(t_window *window, t_ray *ray, int i, char mode)
 	double	max_len;
 	int		size;
 	void	*img_ptr;
+	int		tar_x;
+	int		tar_y;
 	
 	j = -1;
 	ray_w = (int)(WIDTH / N_RAY);
@@ -134,13 +143,28 @@ void	render_wall(t_window *window, t_ray *ray, int i, char mode)
 	color -= 16 * 16 * 16 * 16 * (int)(color_q * ray->dist);
 	if (mode == 'd')
 		color = 0x000000;
-	wall_h = (window->height / (ray->dist / 2));
-	while (++j < ray_w)
+	wall_h = (window->height / (ray->dist / 10));
+	if (mode == 'd')
+	{
+		while (++j < ray_w)
+		{
+			y = (int)round((window->height / 2.0) - (wall_h / 2.0));
+			while (y < (int)round((window->height / 2.0) + (wall_h / 2.0)))
+			{
+				img_data2[y * (int)window->width + (j + (ray_w * i))] = 0x000000;
+				y++;
+			}
+		}
+		return ;
+	}
+	if (ray->side == 0)
 	{
 		y = (int)round((window->height / 2.0) - (wall_h / 2.0));
+		tar_x = (int)((TEXTURE_SIZE / map->block_w) * (((int)ray->hit_x) % map->block_w));
 		while (y < (int)round((window->height / 2.0) + (wall_h / 2.0)))
 		{
-			img_data2[y * (int)window->width + ((ray_w * i) + j)] = color;
+			tar_y = (int)((TEXTURE_SIZE / wall_h) * (y - (int)round((window->height / 2.0) - (wall_h / 2.0))));
+			img_data2[y * (int)window->width + (ray_w * i)] = tx_data[tar_y][tar_x];
 			y++;
 		}
 	}
@@ -205,5 +229,5 @@ int		render_map(t_window *window, t_map *map)
 void	render(void)
 {
 	mlx_put_image_to_window(window->mlx_ptr, window->win_ptr, img_ptr2, 0, 0);
-	mlx_put_image_to_window(window->mlx_ptr, window->win_ptr, img_ptr1, 0, HEIGHT - MAP_VIEW_H);
+//	mlx_put_image_to_window(window->mlx_ptr, window->win_ptr, img_ptr1, 0, HEIGHT - MAP_VIEW_H);
 }

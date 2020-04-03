@@ -16,7 +16,7 @@
 
 void	init_map(t_map *map)
 {
-	map->map = make_map("test02.map", map);
+	map->map = make_map("test01.map", map);
 	map->color = 0xFFFFFF;
 	map->block_w = (int)(MAP_VIEW_W / map->width);
 	map->block_h = (int)(MAP_VIEW_H / map->height);
@@ -173,6 +173,8 @@ int		main(void)
 	img_data1 = (int *)mlx_get_data_addr(img_ptr1, &bpx, &sl, &en);
 	img_ptr2 = mlx_new_image(window->mlx_ptr, WIDTH, HEIGHT);
 	img_data2 = (int *)mlx_get_data_addr(img_ptr2, &bpx, &sl, &en);
+	tx_img = mlx_png_file_to_image(window->mlx_ptr, "./textures/wall_50.png", &sl, &en);
+	tx_data = (int(*)[TEXTURE_SIZE])mlx_get_data_addr(tx_img, &bpx, &sl, &en);
 	render_map(window, map);
 	init_player(&player, (int)(MAP_VIEW_W * (2.0 / 3.0)), (int)(MAP_VIEW_H * (1.0 / 2.0)));
 	while (i < N_RAY)
