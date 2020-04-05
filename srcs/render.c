@@ -1,7 +1,7 @@
 #include "raycasting.h"
 #include <stdio.h>
 
-void	convert_3d(t_window *window, t_ray *ray, int i, char mode)
+void	convert_3d(t_window *window, t_ray *ray, int i, char mode, t_scene *scene)
 {
 	int		j;
 	int		y;
@@ -40,12 +40,12 @@ void	convert_3d(t_window *window, t_ray *ray, int i, char mode)
 	if (ray->side == 0)
 	{
 		y = (int)round((window->height / 2.0) - (wall_h / 2.0));
-		tar_x = (int)((TEXTURE_SIZE / map->block_w) * (((int)ray->hit_x) % map->block_w));
+		tar_x = (int)((TEXTURE_SIZE / (scene->map).block_w) * (((int)ray->hit_x) % (scene->map).block_w));
 		while (y < (int)round((window->height / 2.0) + (wall_h / 2.0)))
 		{
 			tar_y = (int)((TEXTURE_SIZE / wall_h) * (y - (int)round((window->height / 2.0) - (wall_h / 2.0))));
 			window->img_data[y * (int)window->width + (ray_w * i)] = \
-				texture->n_data[tar_y][tar_x];
+				(scene->texture).n_data[tar_y][tar_x];
 			y++;
 		}
 	}
@@ -87,8 +87,8 @@ int		put_map_to_img(t_map *map)
 	return (0);
 }
 
-void	render(void)
+void	render(t_scene *scene)
 {
-	mlx_put_image_to_window(window->mlx_ptr, window->win_ptr, window->img_ptr, 0, 0);
+	mlx_put_image_to_window((scene->window).mlx_ptr, (scene->window).win_ptr, (scene->window).img_ptr, 0, 0);
 //	mlx_put_image_to_window(window->mlx_ptr, window->win_ptr, img_ptr1, 0, HEIGHT - MAP_VIEW_H);
 }

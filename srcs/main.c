@@ -93,30 +93,27 @@ void	init_texture(t_window *window, t_texture *txr)
 
 int		main(void)
 {
+	t_scene		scene;
 	int			i;
 
 	i = 0;
-	if (!(window = malloc(sizeof(t_window))) || 
-		!(map = malloc(sizeof(t_map))) ||
-		!(texture = malloc(sizeof(t_texture))))
-		return (0);
-	init_window(window, WIDTH, HEIGHT, "title_test");
-	init_map(window, map);
-	init_texture(window, texture);
-	put_map_to_img(map);
-	init_player(&player, (int)(MAP_VIEW_W * (2.0 / 3.0)), (int)(MAP_VIEW_H * (1.0 / 2.0)));
+	init_window(&(scene.window), WIDTH, HEIGHT, "title_test");
+	init_map(&(scene.window), &(scene.map));
+	init_texture(&(scene.window), &(scene.texture));
+	put_map_to_img(&(scene.map));
+	init_player(&(scene.player), (int)(MAP_VIEW_W * (2.0 / 3.0)), (int)(MAP_VIEW_H * (1.0 / 2.0)));
 	while (i < N_RAY)
 	{
-		ray_casting(&(player.rays[i]), map);
+		ray_casting(&(scene.player.rays[i]), &(scene.map), &scene);
 		i++;
 	}
 	i = 0;
 	while (i < N_RAY)
 	{
-		convert_3d(window, &(player.rays[i]), i, 'a');
+		convert_3d(&(scene.window), &(scene.player.rays[i]), i, 'a', &scene);
 		i++;
 	}
-	render();
-	mlx_hook(window->win_ptr, 2, 0, deal_key, (void *)0);
-	mlx_loop(window->mlx_ptr);
+	render(&scene);
+	mlx_hook((scene.window).win_ptr, 2, 0, deal_key, &scene);
+	mlx_loop((scene.window).mlx_ptr);
 }

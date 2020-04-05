@@ -65,3 +65,25 @@ char	**make_map(char *filename, t_map *map_info)
 	close(fd);
 	return (map);
 }
+
+/*
+int		parse_options(int fd, t_scene *scene)
+{
+	char	*line;
+
+	while (get_next_line(fd, &line))
+	{
+		if (line[0] == 'R')
+	}
+}
+
+int		load_scene(char *filename, t_scene *scene)
+{
+	int		fd;
+
+	fd = open(filename, O_RDONLY);
+	if (!(parse_options(fd, scene)))
+		return (-1);
+	close(fd);
+}
+*/

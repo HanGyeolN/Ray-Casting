@@ -93,17 +93,22 @@ typedef struct		s_texture
 	int		(*e_data)[TEXTURE_SIZE];
 }					t_texture;
 
-t_window	*window;
-t_map		*map;
-t_player	player;
-t_texture	*texture;
+typedef struct		s_scene
+{
+	t_window	window;
+	t_map		map;
+	t_texture	texture;
+	t_player	player;
+	int			floor_color;
+	int			ceilling_color;
+}					t_scene;
 
 int		is_ray_inf(t_ray *ray);
-int		ray_casting(t_ray *ray, t_map *map);
+int		ray_casting(t_ray *ray, t_map *map, t_scene *scene);
 int		put_map_to_img(t_map *map);
-void	convert_3d(t_window *window, t_ray *ray, int i, char mode);
-void	render(void);
+void	convert_3d(t_window *window, t_ray *ray, int i, char mode, t_scene *scene);
+void	render(t_scene *scene);
 char	**make_map(char *filename, t_map *map_info);
-int		deal_key(int key, void *param);
+int		deal_key(int key, t_scene *scene);
 
 #endif
