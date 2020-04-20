@@ -42,6 +42,10 @@ int		test_mlx(void)
 #include <stdio.h>
 #include <string.h>
 
+/*
+** Maximum path length : 200
+*/
+
 typedef struct	s_cub
 {
 	int		res_w;
@@ -115,6 +119,8 @@ void	print_cub(t_cub *cub)
 	ft_printf("Texture West: %s\n", cub->tex_w);
 	ft_printf("Texture East: %s\n", cub->tex_e);
 	ft_printf("Texture Item: %s\n", cub->tex_i);
+	ft_printf("Floor Color: %x\n", cub->color_f);
+	ft_printf("Ceiling Color: %x\n", cub->color_c);
 }
 
 int		parse_path(char *line, t_cub *cub)
@@ -135,6 +141,49 @@ int		parse_path(char *line, t_cub *cub)
 	else if (ft_strcmp(splits[0], "S") == 0)
 		ft_strcpy(cub->tex_i, splits[1]);
 	free_splits(splits);
+	return (1);
+}
+
+int		is_valid_color(char **colors)
+{
+	int		idx;
+	int		i;
+	idx = 0;
+	i = -1;
+	while (idx < 3)
+	{
+		while (++i < ft_strlen(colors[idx]))
+			if (is_numeric(colors[idx][i]) == 0)
+				return (0);
+		if (ft_atoi(colors[idx]) < 0 || ft_atoi(colors[idx]) > 255)
+			return (0);
+		idx++;
+	}
+	return (1);
+}
+
+int		parse_color(char *line, t_cub *cub)
+{
+	char	**splits;
+	char	**colors;
+	int		color;
+
+	splits = ft_split(line, ' ');
+	if (split_len(splits) != 2)
+		return (0);
+	colors = ft_split(splits[1], ',');
+	if (split_len(colors) != 3 || !(is_valid_color(colors)))
+		return (0);
+	color = 0;
+	color += 16 * 16 * 16 * 16 * ft_atoi(colors[0]);
+	color += 16 * 16 * ft_atoi(colors[1]);
+	color += ft_atoi(colors[2]);
+	if (splits[0][0] == 'F')
+		cub->color_f = color;
+	else if (splits[0][0] == 'C')
+		cub->color_c = color;
+	free_splits(splits);
+	free_splits(colors);
 	return (1);
 }
 
@@ -180,6 +229,14 @@ int		test_split(void)
 		else if (is_texture(line))
 		{
 			if (!(parse_path(line, &cub)))
+			{
+				ft_printf("parse error\n");
+				return (0);
+			}
+		}
+		else if (ft_strncmp(line, "F ", 2) == 0 || ft_strncmp(line, "C ", 2) == 0 )
+		{
+			if (!(parse_color(line, &cub)))
 			{
 				ft_printf("parse error\n");
 				return (0);
