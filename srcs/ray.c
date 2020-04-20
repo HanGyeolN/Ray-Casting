@@ -18,11 +18,11 @@ int		is_hit(t_ray *ray, double x, double y, t_map *map, t_scene *scene)
 		if ((int)ray->hit_x % map->block_h == map->block_h - 1)
 			ray->side = 0;
 		else if ((int)ray->hit_y % map->block_w == map->block_w - 1)
-			ray->side = 0;
+			ray->side = 2;
 		else if ((int)ray->hit_x % map->block_h == 0)
-			ray->side = 0;
+			ray->side = 1;
 		else if ((int)ray->hit_y % map->block_w == 0)
-			ray->side = 0;
+			ray->side = 3;
 		ray->dist = (ray->hit_x - ray->pos_x) * (ray->hit_x - ray->pos_x);
 		ray->dist += (ray->hit_y - ray->pos_y) * (ray->hit_y - ray->pos_y);
 		ray->dist = sqrt(ray->dist);

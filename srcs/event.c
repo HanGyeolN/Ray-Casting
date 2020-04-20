@@ -22,8 +22,8 @@ int		deal_key(int key, t_scene *scene)
 			(scene->player).pos_y += sin((scene->player).rad * PI / 180.0);
 			while (++i < N_RAY)
 			{
-				((scene->player).rays[i]).pos_x = (int)(scene->player).pos_x;
-				((scene->player).rays[i]).pos_y = (int)(scene->player).pos_y;
+				((scene->player).rays[i]).pos_x = (scene->player).pos_x;
+				((scene->player).rays[i]).pos_y = (scene->player).pos_y;
 			}
 		}
 		if (key == KEY_S)
@@ -32,8 +32,8 @@ int		deal_key(int key, t_scene *scene)
 			(scene->player).pos_y -= sin((scene->player).rad * PI / 180.0);
 			while (++i < N_RAY)
 			{
-				((scene->player).rays[i]).pos_x = (int)(scene->player).pos_x;
-				((scene->player).rays[i]).pos_y = (int)(scene->player).pos_y;
+				((scene->player).rays[i]).pos_x = (scene->player).pos_x;
+				((scene->player).rays[i]).pos_y = (scene->player).pos_y;
 			}
 		}
 		else if (key == KEY_D)
@@ -42,8 +42,8 @@ int		deal_key(int key, t_scene *scene)
 			(scene->player).pos_y += cos(((scene->player).rad) * PI / 180.0);
 			while (++i < N_RAY)
 			{
-				((scene->player).rays[i]).pos_x = (int)(scene->player).pos_x;
-				((scene->player).rays[i]).pos_y = (int)(scene->player).pos_y;
+				((scene->player).rays[i]).pos_x = (scene->player).pos_x;
+				((scene->player).rays[i]).pos_y = (scene->player).pos_y;
 			}
 		}
 		else if (key == KEY_A)
@@ -52,8 +52,8 @@ int		deal_key(int key, t_scene *scene)
 			(scene->player).pos_y -= cos(((scene->player).rad) * PI / 180.0);
 			while (++i < N_RAY)
 			{
-				((scene->player).rays[i]).pos_x = (int)(scene->player).pos_x;
-				((scene->player).rays[i]).pos_y = (int)(scene->player).pos_y;
+				((scene->player).rays[i]).pos_x = (scene->player).pos_x;
+				((scene->player).rays[i]).pos_y = (scene->player).pos_y;
 			}
 		}
 	}

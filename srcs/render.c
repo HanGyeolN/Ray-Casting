@@ -40,12 +40,48 @@ void	convert_3d(t_window *window, t_ray *ray, int i, char mode, t_scene *scene)
 	if (ray->side == 0)
 	{
 		y = (int)round((window->height / 2.0) - (wall_h / 2.0));
-		tar_x = (int)((TEXTURE_SIZE / (scene->map).block_w) * (((int)ray->hit_x) % (scene->map).block_w));
+		tar_x = (int)((TEXTURE_SIZE / (scene->map).block_w) * (((int)ray->hit_y) % (scene->map).block_w));
 		while (y < (int)round((window->height / 2.0) + (wall_h / 2.0)))
 		{
 			tar_y = (int)((TEXTURE_SIZE / wall_h) * (y - (int)round((window->height / 2.0) - (wall_h / 2.0))));
 			window->img_data[y * (int)window->width + (ray_w * i)] = \
 				(scene->texture).n_data[tar_y][tar_x];
+			y++;
+		}
+	}
+	else if (ray->side == 1)
+	{
+		y = (int)round((window->height / 2.0) - (wall_h / 2.0));
+		tar_x = (int)((TEXTURE_SIZE / (scene->map).block_w) * (((int)ray->hit_y) % (scene->map).block_w));
+		while (y < (int)round((window->height / 2.0) + (wall_h / 2.0)))
+		{
+			tar_y = (int)((TEXTURE_SIZE / wall_h) * (y - (int)round((window->height / 2.0) - (wall_h / 2.0))));
+			window->img_data[y * (int)window->width + (ray_w * i)] = \
+				(scene->texture).s_data[tar_y][tar_x];
+			y++;
+		}
+	}
+	else if (ray->side == 2)
+	{
+		y = (int)round((window->height / 2.0) - (wall_h / 2.0));
+		tar_x = (int)((TEXTURE_SIZE / (scene->map).block_w) * (((int)ray->hit_x) % (scene->map).block_w));
+		while (y < (int)round((window->height / 2.0) + (wall_h / 2.0)))
+		{
+			tar_y = (int)((TEXTURE_SIZE / wall_h) * (y - (int)round((window->height / 2.0) - (wall_h / 2.0))));
+			window->img_data[y * (int)window->width + (ray_w * i)] = \
+				(scene->texture).e_data[tar_y][tar_x];
+			y++;
+		}
+	}
+	else if (ray->side == 3)
+	{
+		y = (int)round((window->height / 2.0) - (wall_h / 2.0));
+		tar_x = (int)((TEXTURE_SIZE / (scene->map).block_w) * (((int)ray->hit_x) % (scene->map).block_w));
+		while (y < (int)round((window->height / 2.0) + (wall_h / 2.0)))
+		{
+			tar_y = (int)((TEXTURE_SIZE / wall_h) * (y - (int)round((window->height / 2.0) - (wall_h / 2.0))));
+			window->img_data[y * (int)window->width + (ray_w * i)] = \
+				(scene->texture).w_data[tar_y][tar_x];
 			y++;
 		}
 	}
