@@ -34,7 +34,7 @@
 # define N_RAY 800
 
 # define WIDTH 800
-# define HEIGHT 800
+# define HEIGHT 600
 # define MAP_VIEW_W 500
 # define MAP_VIEW_H 500
 
@@ -119,12 +119,37 @@ typedef struct		s_options
 	int			c_color;
 }					t_options;
 
+/*
+** Maximum path length : 200
+*/
+
+typedef struct	s_cub
+{
+	int		line_n;
+	int		res_w;
+	int		res_h;
+	char	tex_n[200];
+	char	tex_s[200];
+	char	tex_w[200];
+	char	tex_e[200];
+	char	tex_i[200];
+	int		color_f;
+	int		color_c;
+	char	**map;
+	int		map_w;
+	int		map_h;
+	int		player_x;
+	int		player_y;
+	int		player_dir;
+}				t_cub;
+
 int		is_ray_inf(t_ray *ray);
 int		ray_casting(t_ray *ray, t_map *map, t_scene *scene);
 int		put_map_to_img(t_map *map);
 void	convert_3d(t_window *window, t_ray *ray, int i, char mode, t_scene *scene);
 void	render(t_scene *scene);
-char	**make_map(char *filename, t_map *map_info);
+char	**make_map(int fd, t_cub *cub, char *filename);
+//char	**make_map(char *filename, t_map *map_info);
 int		deal_key(int key, t_scene *scene);
 
 #endif
