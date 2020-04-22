@@ -8,3 +8,5 @@
 
 ![image](./raycasting01.png)
 
+
+gcc -g srcs/* -o cub3D -I includes -L ./ -lmlx -lft -framework OpenGL -framework AppKit -lz

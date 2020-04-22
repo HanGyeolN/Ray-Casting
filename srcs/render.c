@@ -98,7 +98,7 @@ void	put_block_to_img(t_map *map, int x, int y)
 		j = 0;
 		while (j < map->block_h)
 		{
-			(map->data)[(map->block_h * y + j) * MAP_VIEW_W + (map->block_w * x + i)] = 0xFFFFFF;
+			(map->data)[(map->block_h * y + j) * (int)map->width_r + (map->block_w * x + i)] = 0xFFFFFF;
 			j++;
 		}
 		i++;

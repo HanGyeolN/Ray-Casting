@@ -223,6 +223,7 @@ char	**malloc_map(char **map, int fd, t_cub *cub)
 	cub->map_h = map_h;
 	if (!(map = malloc(sizeof(char *) * (map_h + 1))))
 		return (0);
+	map[map_h] = 0;
 	while (map_h-- > 0)
 	{
 		if (!(map[map_h] = malloc(sizeof(char) * (map_w + 1))))
@@ -230,6 +231,7 @@ char	**malloc_map(char **map, int fd, t_cub *cub)
 			free_map(map, map_h);
 			return (0);
 		}
+		map[map_h][map_w] = '\0';
 	}
 	return (map);
 }
@@ -274,13 +276,13 @@ int		set_player(t_cub *cub)
 				cub->map[y][x] == 'W' || cub->map[y][x] == 'E')
 			{
 				if (cub->map[y][x] == 'N')
-					cub->player_dir = 0;
-				else if (cub->map[y][x] == 'S')
-					cub->player_dir = 180;
-				else if (cub->map[y][x] == 'W')
 					cub->player_dir = 270;
-				else
+				else if (cub->map[y][x] == 'S')
 					cub->player_dir = 90;
+				else if (cub->map[y][x] == 'W')
+					cub->player_dir = 180;
+				else
+					cub->player_dir = 0;
 				cub->player_x = x;
 				cub->player_y = y;
 				return (1);
@@ -373,12 +375,12 @@ int		parse_scene(char *filepath, t_cub *cub)
 			return (0);
 		else if (is_texture(line) && !(check_texture(line, cub, &check)))
 			return (0);
-		else if (is_floor_ceiling(line) && !(check_color(line, &ub, &check)))
+		else if (is_floor_ceiling(line) && !(check_color(line, cub, &check)))
 			return (0);
 		if (check == 0b11111111 && !(check_map(fd, cub, filepath)))
 			return (0);
 	}
 	close(fd);
 	print_cub(cub);
-	return (0);
+	return (1);
 }

@@ -20,6 +20,7 @@
 # include "mlx.h"
 # include "libft.h"
 # include "get_next_line.h"
+# include "libftprintf.h"
 # include <fcntl.h>
 
 # define TEXTURE_SIZE 50
@@ -35,8 +36,8 @@
 
 # define WIDTH 800
 # define HEIGHT 600
-# define MAP_VIEW_W 500
-# define MAP_VIEW_H 500
+# define MAP_VIEW_W 320
+# define MAP_VIEW_H 320
 
 # define SPEED_MOVE 1
 # define SPEED_ROT 2
@@ -76,10 +77,13 @@ typedef struct		s_map
 {
 	double	width;
 	double	height;
+	double	width_r;
+	double	height_r;
 	int		block_w;
 	int		block_h;
 	int		color;
 	char	**map;
+	char	**map_r;
 	void	*image;
 	int		*data;
 }					t_map;
@@ -90,10 +94,12 @@ typedef struct		s_texture
 	void	*s;
 	void	*w;
 	void	*e;
+	void	*i;
 	int		(*n_data)[TEXTURE_SIZE];
 	int		(*s_data)[TEXTURE_SIZE];
 	int		(*w_data)[TEXTURE_SIZE];
 	int		(*e_data)[TEXTURE_SIZE];
+	int		(*i_data)[TEXTURE_SIZE];
 }					t_texture;
 
 typedef struct		s_scene
@@ -149,7 +155,8 @@ int		put_map_to_img(t_map *map);
 void	convert_3d(t_window *window, t_ray *ray, int i, char mode, t_scene *scene);
 void	render(t_scene *scene);
 char	**make_map(int fd, t_cub *cub, char *filename);
-//char	**make_map(char *filename, t_map *map_info);
+int		parse_scene(char *filepath, t_cub *cub);
 int		deal_key(int key, t_scene *scene);
+int		load_scene(char *scene_path, t_scene *scene, t_cub *cub);
 
 #endif
