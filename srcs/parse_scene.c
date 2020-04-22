@@ -2,47 +2,6 @@
 #include "libftprintf.h"
 
 /*
-int		test_mlx(void)
-{
-	int		i, j;
-	int		bpx, sl, en, w, h;
-	void	*mlx_ptr;
-	void	*win_ptr;
-	void	*t_ptr;
-	int		*t_data;
-	void	*img_ptr;
-	int		*img_data;
-	int		(*arr2)[200];
-
-	i = 0;
-	j = 0;
-	mlx_ptr = mlx_init();
-	win_ptr = mlx_new_window(mlx_ptr, 1000, 1000, "test");
-	img_ptr = mlx_new_image(mlx_ptr, 500, 500);
-	img_data = (int *)mlx_get_data_addr(img_ptr, &bpx, &sl, &en);
-	t_ptr = mlx_png_file_to_image(mlx_ptr, "./textures/wall_s.png", &w, &h);
-	t_data = (int *)mlx_get_data_addr(t_ptr, &bpx, &sl, &en);
-	arr2 = (int(*)[200])t_data;
-	while (j < 500)
-	{
-		i = 100;
-		while (i < 400)
-		{
-			img_data[500 * j + i] = arr2[(int)((2 / 5.0) * j)][(int)((2 / 3.0) * (i - 100))];
-			i++;
-		}
-		j++;
-	}
-	mlx_put_image_to_window(mlx_ptr, win_ptr, img_ptr, 0, 0);
-	mlx_loop(mlx_ptr);
-	return (0);
-}
-*/
-
-#include <stdio.h>
-#include <string.h>
-
-/*
 ** Calculate number of splited word 
 */
 
@@ -129,6 +88,10 @@ void	print_cub(t_cub *cub)
 		ft_printf("%s\n", (cub->map)[i]);
 		i++;
 	}
+	ft_printf("===========================\n");
+	ft_printf("Player Position X: %d\n", cub->player_x);
+	ft_printf("Player Position Y: %d\n", cub->player_y);
+	ft_printf("Player Direction: %d\n", cub->player_dir);
 }
 
 int		parse_path(char *line, t_cub *cub, int *check)
@@ -156,12 +119,12 @@ int		parse_path(char *line, t_cub *cub, int *check)
 	else if (ft_strcmp(splits[0], "EA") == 0)
 	{
 		ft_strcpy(cub->tex_e, splits[1]);
-		*check += 0b0001000;
+		*check += 0b00001000;
 	}
 	else if (ft_strcmp(splits[0], "S") == 0)
 	{
 		ft_strcpy(cub->tex_i, splits[1]);
-		*check += 0b0000100;
+		*check += 0b00000100;
 	}
 	free_splits(splits);
 	return (1);
@@ -230,17 +193,6 @@ int		parse_color(char *line, t_cub *cub, int *check)
 ** texture keyword : NO, SO, WE, EA, S
 */
 
-int		is_texture(char *line)
-{
-	if (ft_strncmp(line, "NO ", 3) == 0 ||
-			ft_strncmp(line, "SO ", 3) == 0 ||
-			ft_strncmp(line, "WE ", 3) == 0 ||
-			ft_strncmp(line, "EA ", 3) == 0 ||
-			ft_strncmp(line, "S ", 2) == 0)
-		return (1);
-	return (0);
-}
-
 void	free_map(char **map, int map_h)
 {
 	while (++map_h < 10)
@@ -307,62 +259,126 @@ char	**make_map(int fd, t_cub *cub, char *filename)
 	return (cub->map);
 }
 
-int		test_split(char *filepath)
+int		set_player(t_cub *cub)
+{
+	int		x;
+	int		y;
+
+	y = -1;
+	while (++y < cub->map_h)
+	{
+		x = -1;
+		while (++x < cub->map_w)
+		{
+			if (cub->map[y][x] == 'N' || cub->map[y][x] == 'S' ||
+				cub->map[y][x] == 'W' || cub->map[y][x] == 'E')
+			{
+				if (cub->map[y][x] == 'N')
+					cub->player_dir = 0;
+				else if (cub->map[y][x] == 'S')
+					cub->player_dir = 180;
+				else if (cub->map[y][x] == 'W')
+					cub->player_dir = 270;
+				else
+					cub->player_dir = 90;
+				cub->player_x = x;
+				cub->player_y = y;
+				return (1);
+			}
+		}
+	}
+	return (0);
+}
+
+int		is_resolution(char *line)
+{
+	if (ft_strncmp(line, "R ", 2) == 0)
+		return (1);
+	return (0);
+}
+
+int		is_texture(char *line)
+{
+	if (ft_strncmp(line, "NO ", 3) == 0 ||
+			ft_strncmp(line, "SO ", 3) == 0 ||
+			ft_strncmp(line, "WE ", 3) == 0 ||
+			ft_strncmp(line, "EA ", 3) == 0 ||
+			ft_strncmp(line, "S ", 2) == 0)
+		return (1);
+	return (0);
+}
+
+int		is_floor_ceiling(char *line)
+{
+	if (ft_strncmp(line, "F ", 2) == 0 || ft_strncmp(line, "C ", 2) == 0)
+		return (1);
+	return (0);
+}
+
+int		check_resolution(char *line, t_cub *cub, int *check)
+{
+	if (!(parse_resolution(line, cub, check)))
+	{
+		ft_printf("Resolution Error\n");
+		return (0);
+	}
+	return (1);
+}
+
+int		check_texture(char *line, t_cub *cub, int *check)
+{
+	if (!(parse_path(line, cub, check)))
+	{
+		ft_printf("Texture Error\n");
+		return (0);
+	}
+	return (1);
+}
+
+int		check_color(char *line, t_cub *cub, int *check)
+{
+	if (!(parse_color(line, cub, check)))
+	{
+		ft_printf("Floor Ceiling Error\n");
+		return (0);
+	}
+	return (1);
+}
+
+int		check_map(int fd, t_cub *cub, char *filepath)
+{
+	if (!(make_map(fd, cub, filepath)) || !(set_player(cub)))
+	{
+		ft_printf("map error\n");
+		return (0);
+	}
+	return (1);
+}
+
+int		parse_scene(char *filepath, t_cub *cub)
 {
 	int		fd;
 	int		check;
 	char	*line;
-	t_cub	cub;
 
 	check = 0b00000000;
-	cub.line_n = 0;
+	cub->line_n = 0;
 	fd = open(filepath, O_RDONLY);
 	if (fd < 0)
 		perror("[scene open]");
 	while (get_next_line(fd, &line) > 0)
 	{
-		cub.line_n += 1;
-		if (ft_strncmp(line, "R ", 2) == 0)
-		{
-			if (!(parse_resolution(line, &cub, &check)))
-			{
-				ft_printf("parse error\n");
-				return (0);
-			}
-		}
-		else if (is_texture(line))
-		{
-			if (!(parse_path(line, &cub, &check)))
-			{
-				ft_printf("parse error\n");
-				return (0);
-			}
-		}
-		else if (ft_strncmp(line, "F ", 2) == 0 || ft_strncmp(line, "C ", 2) == 0 )
-		{
-			if (!(parse_color(line, &cub, &check)))
-			{
-				ft_printf("parse error\n");
-				return (0);
-			}
-		}
-		if (check == 0b11111111)
-		{
-			if (!(make_map(fd, &cub, filepath)))
-			{
-				ft_printf("map error\n");
-				return (0);
-			}
-		}
+		cub->line_n += 1;
+		if (is_resolution(line) && !(check_resolution(line, cub, &check)))
+			return (0);
+		else if (is_texture(line) && !(check_texture(line, cub, &check)))
+			return (0);
+		else if (is_floor_ceiling(line) && !(check_color(line, &ub, &check)))
+			return (0);
+		if (check == 0b11111111 && !(check_map(fd, cub, filepath)))
+			return (0);
 	}
 	close(fd);
-	print_cub(&cub);
-	ft_printf("check sum:%d",check);
-	return (0);
-}
-
-int		main(void)
-{
-	test_split("./test.cub");
+	print_cub(cub);
 	return (0);
 }

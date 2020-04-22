@@ -90,61 +90,7 @@ void	init_texture(t_window *window, t_texture *txr)
 	txr->e_data = (int(*)[TEXTURE_SIZE])mlx_get_data_addr(txr->e, \
 														&temp, &temp, &temp);
 }
-/*
-int		parse_r(char *line)
-{
-	int		i;
 
-	i = 0;
-	while (line[i])
-	{
-		while (line[i] != ' ')
-			i++;
-		if (i )
-	}
-}
-
-int		is_num(char c)
-{
-	if (c >= '0' && c <= '9')
-		return (1);
-	return (0);
-}
-
-int		parse_resolution(char *str)
-{
-	int		i;
-
-	i = 2;
-	if (ft_strncmp(str, "R ", 2) == 0)
-	{
-		ft_atoi(&str[2]);
-		while (is_num(str[i]))
-			i++;
-		ft_atoi(&str[i]);
-	}
-	else if (ft_strcmp(str, "NO ", 3))
-	{
-		opt->txr_no_path = ft_strdup(&(str));
-	}
-}
-
-int		get_options(char *filepath, t_option *opt)
-{
-	int		fd;
-	int		len;
-	char	*line;
-
-	fd = open(filepath, O_RDONLY);
-	while (len = get_next_line(fd, &line))
-	{
-		if (line[0] == 'R')
-		{
-			opt->res_w = ft_atoi(&line[2]);
-		}
-	}
-}
-*/
 int		load_scene(char *filepath, t_scene *scene)
 {
 	init_window(&(scene->window), WIDTH, HEIGHT, filepath);

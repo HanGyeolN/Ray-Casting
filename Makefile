@@ -3,7 +3,7 @@ NAME = cub3D
 CFLAGS = -Wall -Werror -Wextra
 SRC = main.c		\
 	  render.c		\
-	  parse_map.c	\
+	  parse_scene.c	\
 	  ray.c			\
 	  event.c
 SRC_DIR = srcs

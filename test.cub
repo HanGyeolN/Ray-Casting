@@ -1,9 +1,9 @@
-R 800 600
 NO ./textures/wall_n.png
 SO ./textures/wall_s.png
 WE ./textures/wall_w.png
 EA ./textures/wall_e.png
 
+R 800 600
 S ./textures/sprite.png
 F 220,100,0
 C 225,30,0
