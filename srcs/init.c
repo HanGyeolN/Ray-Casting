@@ -21,8 +21,8 @@ void	init_map(t_window *window, t_map *map, t_cub *cub)
 	map->color = 0xFFFFFF;
 	map->width = (double)cub->map_w;
 	map->height = (double)cub->map_h;
-	map->block_w = 20;
-	map->block_h = 20;
+	map->block_w = 10;
+	map->block_h = 10;
 	map->width_r = map->block_w * cub->map_w;
 	map->height_r = map->block_h * cub->map_h;
 	map->image = mlx_new_image(window->mlx_ptr, map->width_r, map->height_r);
@@ -58,12 +58,12 @@ void	init_ray(t_ray *ray, double x, double y, double rad)
 	ray->pos_y = y;
 	ray->rad = rad;
 	if (is_ray_inf(ray) != 0)
-		ray->dydx = (is_ray_inf(ray) == 1) ? 1 : -1;
+		ray->dydx = (is_ray_inf(ray) == 1) ? 999999.0: -999999.0;
 	else
 		ray->dydx = tan(ray->rad * PI / 180.0);
 }
 
-void	init_player(t_player *player, t_cub *cub, t_map *map)
+int		init_player(t_player *player, t_cub *cub, t_map *map)
 {
 	int		i;
 
@@ -72,15 +72,18 @@ void	init_player(t_player *player, t_cub *cub, t_map *map)
 	cub->player_y = cub->player_y * map->block_h + (map->block_h / 2);
 	player->pos_x = (double)cub->player_x;
 	player->pos_y = (double)cub->player_y;
-	player->rad = (double)cub->player_dir;
-	while (i < N_RAY)
+	player->rad = cub->player_dir;
+	if (!(player->rays = malloc(sizeof(t_ray) * cub->res_w)))
+		return (0);
+	while (i < cub->res_w)
 	{
 		init_ray(&(player->rays[i]), 
 					(double)cub->player_x,
 					(double)cub->player_y,
-					player->rad + ((60.0 / (N_RAY - 1)) * i) - 30.0);
+					player->rad + ((60.0 / (double)(cub->res_w - 1)) * (double)i) - 30.0);
 		i++;
 	}
+	return (1);
 }
 
 int		new_map(t_map *map)
@@ -119,6 +122,7 @@ int		load_scene(char *scene_path, t_scene *scene, t_cub *cub)
 	if (!(new_map(&(scene->map))))
 		return (0);
 	init_texture(&(scene->window), &(scene->texture), cub);
-	init_player(&(scene->player), cub, &(scene->map));
+	if (!(init_player(&(scene->player), cub, &(scene->map))))
+		return (0);
 	return (1);
 }

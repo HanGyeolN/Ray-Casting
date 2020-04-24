@@ -18,7 +18,7 @@ void	casting(t_scene *scene)
 	int			i;
 
 	i = 0;
-	while (i < N_RAY)
+	while (i < (int)(scene->window).width)
 	{
 		ray_casting(&(scene->player.rays[i]), &(scene->map), scene);
 		i++;
@@ -30,7 +30,7 @@ void	convert(t_scene *scene)
 	int			i;
 
 	i = 0;
-	while (i < N_RAY)
+	while (i < (int)(scene->window).width)
 	{
 		convert_3d(&(scene->window), &(scene->player.rays[i]), i, 'a', scene);
 		i++;

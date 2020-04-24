@@ -91,7 +91,7 @@ void	print_cub(t_cub *cub)
 	ft_printf("===========================\n");
 	ft_printf("Player Position X: %d\n", cub->player_x);
 	ft_printf("Player Position Y: %d\n", cub->player_y);
-	ft_printf("Player Direction: %d\n", cub->player_dir);
+	ft_printf("Player Direction: %d\n", (int)cub->player_dir);
 }
 
 int		parse_path(char *line, t_cub *cub, int *check)
@@ -276,13 +276,13 @@ int		set_player(t_cub *cub)
 				cub->map[y][x] == 'W' || cub->map[y][x] == 'E')
 			{
 				if (cub->map[y][x] == 'N')
-					cub->player_dir = 270;
+					cub->player_dir = 270.0;
 				else if (cub->map[y][x] == 'S')
-					cub->player_dir = 90;
+					cub->player_dir = 90.0;
 				else if (cub->map[y][x] == 'W')
-					cub->player_dir = 180;
+					cub->player_dir = 180.0;
 				else
-					cub->player_dir = 0;
+					cub->player_dir = 0.0;
 				cub->player_x = x;
 				cub->player_y = y;
 				return (1);

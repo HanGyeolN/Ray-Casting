@@ -32,12 +32,6 @@
 # define KEY_D 2
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
-# define N_RAY 800
-
-# define WIDTH 800
-# define HEIGHT 600
-# define MAP_VIEW_W 320
-# define MAP_VIEW_H 320
 
 # define SPEED_MOVE 1
 # define SPEED_ROT 2
@@ -70,7 +64,7 @@ typedef struct		s_player
 	double	pos_x;
 	double	pos_y;
 	double	rad;
-	t_ray	rays[N_RAY];
+	t_ray	*rays;
 }					t_player;
 
 typedef struct		s_map
@@ -112,19 +106,6 @@ typedef struct		s_scene
 	int			ceilling_color;
 }					t_scene;
 
-typedef struct		s_options
-{
-	int			res_w;
-	int			res_h;
-	char		*txr_no_path;
-	char		*txr_so_path;
-	char		*txr_we_path;
-	char		*txr_ea_path;
-	char		*txr_sp_path;
-	int			f_color;
-	int			c_color;
-}					t_options;
-
 /*
 ** Maximum path length : 200
 */
@@ -146,7 +127,7 @@ typedef struct	s_cub
 	int		map_h;
 	int		player_x;
 	int		player_y;
-	int		player_dir;
+	double	player_dir;
 }				t_cub;
 
 int		is_ray_inf(t_ray *ray);
