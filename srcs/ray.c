@@ -17,9 +17,8 @@ int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 	{
 		hit = 0;
 		camera_x = 2 * x / (double)scene->window.width - 1;
-		scene->player.rays[x].dir_x = scene->player.dir_x + scene->player.rays[x].plane_x * camera_x;
-		scene->player.rays[x].dir_y = scene->player.dir_y + scene->player.rays[x].plane_y * camera_x;
-		printf("p: %f, %f\n", scene->player.rays[x].pos_x, scene->player.rays[x].pos_y);
+		scene->player.rays[x].dir_x = scene->player.dir_x + scene->player.plane_x * camera_x;
+		scene->player.rays[x].dir_y = scene->player.dir_y + scene->player.plane_y * camera_x;
 		map_x = (int)scene->player.rays[x].pos_x;
 		map_y = (int)scene->player.rays[x].pos_y;
 		scene->player.rays[x].delta_dist_x = fabs(1 / scene->player.rays[x].dir_x);
@@ -100,23 +99,34 @@ int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 		y = scene->player.rays[x].draw_s - 1;
 		while (++y < scene->player.rays[x].draw_e)
 		{
-			int		tex_y;
+			int		tex_y, color;
 			tex_y = y * 256 - (int)scene->window.height * 128 + scene->player.rays[x].line_h * 128;
 			tex_y = ((tex_y * TEXTURE_H) / scene->player.rays[x].line_h) / 256;
-			int		color = scene->texture.n_data[tex_y][tex_x];
+			color = scene->texture.n_data[tex_y][tex_x];
 			if (scene->player.rays[x].side == 1)
 				color = (color >> 1) & 8355711;
 			scene->window.img_data[y * (int)scene->window.width + x] = color;
 		}
+		y = -1;
+		while (++y < scene->player.rays[x].draw_s)
+		{
+			scene->window.img_data[y * (int)scene->window.width + x] = scene->c_color;
+		}
+		y = scene->player.rays[x].draw_e - 1;
+		while (++y < scene->window.height)
+		{
+			scene->window.img_data[y * (int)scene->window.width + x] = scene->f_color;
+		}
 	}
-	printf("---------------------------------------------\n");
-	printf("pos: %f, %f\n", scene->player.rays[0].pos_x, scene->player.rays[0].pos_y);
-	printf("spd: %f\n", scene->player.move_speed);
-	printf("dist: %f\n", scene->player.rays[0].perp_wall_dist);
-	printf("dir: %f, %f\n", scene->player.rays[0].dir_x, scene->player.rays[0].dir_x);
-	printf("map: %d, %d\n", map_x, map_y);
-	printf("side: %f, %f\n", scene->player.rays[0].side_dist_x, scene->player.rays[0].side_dist_y);
-	printf("step: %d, %d\n", step_x, step_y);
-	printf("----------------------------------------------\n");
+
+	// printf("---------------------------------------------\n");
+	// printf("pos: %f, %f\n", scene->player.rays[0].pos_x, scene->player.rays[0].pos_y);
+	// printf("spd: %f\n", scene->player.move_speed);
+	// printf("dist: %f\n", scene->player.rays[0].perp_wall_dist);
+	// printf("dir: %f, %f\n", scene->player.rays[0].dir_x, scene->player.rays[0].dir_x);
+	// printf("map: %d, %d\n", map_x, map_y);
+	// printf("side: %f, %f\n", scene->player.rays[0].side_dist_x, scene->player.rays[0].side_dist_y);
+	// printf("step: %d, %d\n", step_x, step_y);
+	// printf("----------------------------------------------\n");
 	return (1);
 }

@@ -56,8 +56,6 @@ typedef struct		s_ray
 	double	hit_y;
 	double	dir_x;
 	double	dir_y;
-	double	plane_x;
-	double	plane_y;
 	double	side_dist_x;
 	double	side_dist_y;
 	double	delta_dist_x;
@@ -81,6 +79,8 @@ typedef struct		s_player
 	double	pos_y;
 	double	dir_x;
 	double	dir_y;
+	double	plane_x;
+	double	plane_y;
 	double	move_speed;
 	double	rot_speed;
 	double	rad;
@@ -122,8 +122,8 @@ typedef struct		s_scene
 	t_map		map;
 	t_texture	texture;
 	t_player	player;
-	int			floor_color;
-	int			ceilling_color;
+	int			f_color;
+	int			c_color;
 }					t_scene;
 
 /*
@@ -157,7 +157,8 @@ void	convert_3d(t_window *window, t_ray *ray, int i, char mode, t_scene *scene);
 void	render(t_scene *scene);
 char	**make_map(int fd, t_cub *cub, char *filename);
 int		parse_scene(char *filepath, t_cub *cub);
-int		deal_key(int key, t_scene *scene);
+int		press_key(int key, t_scene *scene);
+int		release_key(int key, t_scene *scene);
 int		load_scene(char *scene_path, t_scene *scene, t_cub *cub);
 
 #endif

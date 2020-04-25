@@ -48,6 +48,9 @@ int		main(void)
 //	casting(&scene);
 //	convert(&scene);
 	render(&scene);
-	mlx_hook((scene.window).win_ptr, 2, 0, deal_key, &scene);
+	// mlx_hook((scene.window).win_ptr, 2, 0, press_key, &scene);
+	// mlx_hook((scene.window).win_ptr, 3, 0, release_key, &scene);
+	mlx_hook((scene.window).win_ptr, 2, 0, press_key, &scene);
+//	mlx_key_hook((scene.window).win_ptr, press_key, &scene);
 	mlx_loop((scene.window).mlx_ptr);
 }
