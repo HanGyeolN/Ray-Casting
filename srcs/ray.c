@@ -76,8 +76,8 @@ double	distance(double s_x, double s_y, double e_x, double e_y)
 
 int		ray_casting(t_ray *ray, t_map *map, t_scene *scene)
 {
-	double	map_x;
-	double	map_y;
+	int		map_x;
+	int		map_y;
 	double	side_dist_x;
 	double	side_dist_y;
 	double	delta_dist_x;
@@ -93,8 +93,8 @@ int		ray_casting(t_ray *ray, t_map *map, t_scene *scene)
 	if (!scene)
 		return (0);
 	hit = 0;
-	map_x = ray->pos_x;
-	map_y = ray->pos_y;
+	map_x = (int)ray->pos_x;
+	map_y = (int)ray->pos_y;
 	// if (is_ray_inf(ray))
 	// {
 	// 	// while (map->map_r[map_y][map_x] != '1')
@@ -213,39 +213,39 @@ int		ray_casting(t_ray *ray, t_map *map, t_scene *scene)
 	ty = side_dist_y;
 	while (hit == 0)
 	{
-		pos = ((int)map_y * (int)map->width_r + (int)map_x);
+		pos = (map_y * (int)map->width_r + map_x);
 		(map->data)[pos] = ray->color;
 		if (side_dist_x < side_dist_y)
 		{
 			side_dist_x += delta_dist_x;
-			map_x += (double)dx;
+			map_x += dx;
 			side = 1;
 		}
 		else
 		{
 			side_dist_y += delta_dist_y;
-			map_y += (double)dy;
+			map_y += dy;
 			side = 0;
 		}
-		if (map->map_r[(int)map_y][(int)map_x] == '1')
+		if (map->map_r[map_y][map_x] == '1')
 		{
 			hit = 1;
 			ray->hit_x = (double)map_x;
 			ray->hit_y = (double)map_y;
 			ray->dist = (side == 1) ? side_dist_x : side_dist_y;
-			if (map->map_r[(int)map_y - 1][(int)map_x] == '0' && side == 0)
+			if (map->map_r[map_y - 1][map_x] == '0' && side == 0)
 			{
 				ray->side = 0;
 			}
-			else if (map->map_r[(int)map_y + 1][(int)map_x] == '0' && side == 0)
+			else if (map->map_r[map_y + 1][map_x] == '0' && side == 0)
 			{
 				ray->side = 2;
 			}
-			else if (map->map_r[(int)map_y][(int)map_x + 1] == '0' && side == 1)
+			else if (map->map_r[map_y][map_x + 1] == '0' && side == 1)
 			{
 				ray->side = 1;
 			}
-			else if (map->map_r[(int)map_y][(int)map_x - 1] == '0' && side == 1)
+			else if (map->map_r[map_y][map_x - 1] == '0' && side == 1)
 			{
 				ray->side = 3;
 			}
