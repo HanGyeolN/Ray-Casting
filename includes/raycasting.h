@@ -24,6 +24,8 @@
 # include <fcntl.h>
 
 # define TEXTURE_SIZE 50
+# define TEXTURE_H 50
+# define TEXTURE_W 50
 
 # define PI 3.14159265
 # define KEY_W 13
@@ -52,17 +54,33 @@ typedef struct		s_ray
 	double	pos_y;
 	double	hit_x;
 	double	hit_y;
+	double	dir_x;
+	double	dir_y;
+	double	plane_x;
+	double	plane_y;
+	double	side_dist_x;
+	double	side_dist_y;
+	double	delta_dist_x;
+	double	delta_dist_y;
+	double	perp_wall_dist;
 	double	rad;
-	double	dydx;
 	double	dist;
+	double	wall_x;
+	int		line_h;
+	int		draw_s;
+	int		draw_e;
 	int		color;
 	int		side;
+	int		hit;
+	char	hit_type;
 }					t_ray;
 
 typedef struct		s_player
 {
 	double	pos_x;
 	double	pos_y;
+	double	dir_x;
+	double	dir_y;
 	double	rad;
 	t_ray	*rays;
 }					t_player;
@@ -131,7 +149,7 @@ typedef struct	s_cub
 }				t_cub;
 
 int		is_ray_inf(t_ray *ray);
-int		ray_casting(t_ray *ray, t_map *map, t_scene *scene);
+int		ray_casting(t_ray **rays, t_map *map, t_scene *scene);
 int		put_map_to_img(t_map *map);
 void	convert_3d(t_window *window, t_ray *ray, int i, char mode, t_scene *scene);
 void	render(t_scene *scene);

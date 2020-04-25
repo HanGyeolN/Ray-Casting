@@ -57,10 +57,10 @@ void	init_ray(t_ray *ray, double x, double y, double rad)
 	ray->pos_x = x;
 	ray->pos_y = y;
 	ray->rad = rad;
-	if (is_ray_inf(ray) != 0)
-		ray->dydx = (is_ray_inf(ray) == 1) ? 999999.0: -999999.0;
-	else
-		ray->dydx = tan(ray->rad * PI / 180.0);
+	ray->plane_x = 0;
+	ray->plane_y = 0.66;
+	ray->hit = 0;
+	ray->hit_type = '0';
 }
 
 int		init_player(t_player *player, t_cub *cub, t_map *map)
@@ -68,11 +68,15 @@ int		init_player(t_player *player, t_cub *cub, t_map *map)
 	int		i;
 
 	i = 0;
-	cub->player_x = cub->player_x * map->block_w + (map->block_w / 2);
-	cub->player_y = cub->player_y * map->block_h + (map->block_h / 2);
+	if(!map)
+		return (0);
+	cub->player_x = cub->player_x;
+	cub->player_y = cub->player_y;
 	player->pos_x = (double)cub->player_x;
 	player->pos_y = (double)cub->player_y;
 	player->rad = cub->player_dir;
+	player->dir_x = -1.0;
+	player->dir_y = 0.0;
 	if (!(player->rays = malloc(sizeof(t_ray) * cub->res_w)))
 		return (0);
 	while (i < cub->res_w)

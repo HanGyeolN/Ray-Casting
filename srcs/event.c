@@ -9,12 +9,13 @@ int		deal_key(int key, t_scene *scene)
 
 	i = -1;
 	n_ray = (int)(scene->window).width;
-	while (++i < n_ray)
-	{
-		((scene->player).rays[i]).color = 0x000000;
-		convert_3d(&(scene->window), &((scene->player).rays[i]), i, 'd', scene);
-		ray_casting(&((scene->player).rays[i]), &(scene->map), scene);
-	}
+	ray_casting(&((scene->player).rays), &(scene->map), scene);
+	// while (++i < n_ray)
+	// {
+	// 	((scene->player).rays[i]).color = 0x000000;
+	// 	convert_3d(&(scene->window), &((scene->player).rays[i]), i, 'd', scene);
+	// 	ray_casting(&((scene->player).rays[i]), &(scene->map), scene);
+	// }
 	i = -1;
 	if (key == KEY_W || key == KEY_S || key == KEY_A || key == KEY_D)
 	{
@@ -74,21 +75,16 @@ int		deal_key(int key, t_scene *scene)
 				((scene->player).rays[i]).rad -= 360.0;
 			else if (((scene->player).rays[i]).rad < 0.0)
 				((scene->player).rays[i]).rad += 360.0;
-			if (((scene->player).rays[i]).rad >= 89.99 && ((scene->player).rays[i]).rad <= 90.01)
-				((scene->player).rays[i]).dydx = 1;
-			else if (((scene->player).rays[i]).rad >= 269.99 && ((scene->player).rays[i]).rad <= 270.01)
-				((scene->player).rays[i]).dydx = -1;
-			else
-				((scene->player).rays[i]).dydx = tan(((scene->player).rays[i]).rad * PI / 180.0);
 		}
 	}
 	i = -1;
-	while (++i < n_ray)
-	{
-		((scene->player).rays[i]).color = 0xFFFFFF;
-		ray_casting(&((scene->player).rays[i]), &(scene->map), scene);
-		convert_3d(&(scene->window), &((scene->player).rays[i]), i, 'a', scene);
-	}
+	ray_casting(&((scene->player).rays), &(scene->map), scene);
+	// while (++i < n_ray)
+	// {
+	// 	((scene->player).rays[i]).color = 0xFFFFFF;
+	// 	ray_casting(&((scene->player).rays[i]), &(scene->map), scene);
+	// 	convert_3d(&(scene->window), &((scene->player).rays[i]), i, 'a', scene);
+	// }
 	render(scene);
 	return (0);
 }

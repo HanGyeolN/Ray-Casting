@@ -20,7 +20,7 @@ void	casting(t_scene *scene)
 	i = 0;
 	while (i < (int)(scene->window).width)
 	{
-		ray_casting(&(scene->player.rays[i]), &(scene->map), scene);
+		ray_casting(&(scene->player.rays), &(scene->map), scene);
 		i++;
 	}
 }
@@ -44,8 +44,9 @@ int		main(void)
 
 	if (!(load_scene("./test.cub", &scene, &cub)))
 		return (0);
-	casting(&scene);
-	convert(&scene);
+	ray_casting(&(scene.player.rays), &(scene.map), &scene);
+//	casting(&scene);
+//	convert(&scene);
 	render(&scene);
 	mlx_hook((scene.window).win_ptr, 2, 0, deal_key, &scene);
 	mlx_loop((scene.window).mlx_ptr);
