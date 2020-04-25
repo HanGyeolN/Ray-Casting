@@ -77,6 +77,8 @@ int		init_player(t_player *player, t_cub *cub, t_map *map)
 	player->rad = cub->player_dir;
 	player->dir_x = -1.0;
 	player->dir_y = 0.0;
+	player->move_speed = 0.1;
+	player->rot_speed = 0.1;
 	if (!(player->rays = malloc(sizeof(t_ray) * cub->res_w)))
 		return (0);
 	while (i < cub->res_w)

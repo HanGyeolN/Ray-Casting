@@ -8,29 +8,46 @@ int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 	double	camera_x;
 	int		step_x;
 	int		step_y;
+	int		hit;
 
 	x = -1;
 	if (!rays)
 		return (0);
 	while (++x < scene->window.width)
 	{
+		hit = 0;
 		camera_x = 2 * x / (double)scene->window.width - 1;
 		scene->player.rays[x].dir_x = scene->player.dir_x + scene->player.rays[x].plane_x * camera_x;
 		scene->player.rays[x].dir_y = scene->player.dir_y + scene->player.rays[x].plane_y * camera_x;
+		printf("p: %f, %f\n", scene->player.rays[x].pos_x, scene->player.rays[x].pos_y);
 		map_x = (int)scene->player.rays[x].pos_x;
 		map_y = (int)scene->player.rays[x].pos_y;
 		scene->player.rays[x].delta_dist_x = fabs(1 / scene->player.rays[x].dir_x);
 		scene->player.rays[x].delta_dist_y = fabs(1 / scene->player.rays[x].dir_y);
-		step_x = (scene->player.rays[x].dir_x < 0) ? -1 : 1;
-		step_y = (scene->player.rays[x].dir_y < 0) ? -1 : 1;
-		((scene->player).rays[x]).side_dist_x = (scene->player.rays[x].dir_x < 0) ? \
-			((scene->player.rays[x].pos_x - map_x) * scene->player.rays[x].delta_dist_x) : \
-			((map_x + 1.0 - scene->player.rays[x].pos_x) * scene->player.rays[x].delta_dist_x);
-		((scene->player).rays[x]).side_dist_y = (scene->player.rays[x].dir_y < 0) ? \
-			((scene->player.rays[x].pos_y - map_y) * scene->player.rays[x].delta_dist_y) : \
-			((map_y + 1.0 - scene->player.rays[x].pos_y) * scene->player.rays[x].delta_dist_y);
+
+		if (scene->player.rays[x].dir_x < 0)
+		{
+			step_x = -1;
+			scene->player.rays[x].side_dist_x = (scene->player.rays[x].pos_x - map_x) * scene->player.rays[x].delta_dist_x;
+		}
+		else
+		{
+			step_x = 1;
+			scene->player.rays[x].side_dist_x = (map_x + 1.0 - scene->player.rays[x].pos_x) * scene->player.rays[x].delta_dist_x;
+		}
+		if (scene->player.rays[x].dir_y < 0)
+		{
+			step_y = -1;
+			scene->player.rays[x].side_dist_y = (scene->player.rays[x].pos_y - map_y) * scene->player.rays[x].delta_dist_y;
+		}
+		else
+		{
+			step_y = 1;
+			scene->player.rays[x].side_dist_y = (map_y + 1.0 - scene->player.rays[x].pos_y) * scene->player.rays[x].delta_dist_y;
+		}
+
 		// dda
-		while (scene->player.rays[x].hit == 0)
+		while (hit == 0)
 		{
 			if (scene->player.rays[x].side_dist_x < scene->player.rays[x].side_dist_y)
 			{
@@ -46,10 +63,11 @@ int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 			}
 			if (map->map[map_y][map_x] == '1')
 			{
-				scene->player.rays[x].hit = 1;
+				hit = 1;
 				scene->player.rays[x].hit_type = '1';
 			}
 		}
+		
 		// drawing
 		scene->player.rays[x].perp_wall_dist = (scene->player.rays[x].side == 0) ? \
 			((map_x - scene->player.rays[x].pos_x + (1 - step_x) / 2) / scene->player.rays[x].dir_x) :
@@ -78,7 +96,6 @@ int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 		step = 1.0 * TEXTURE_H / scene->player.rays[x].line_h;
 		double	tex_pos;
 		tex_pos = (scene->player.rays[x].draw_s - scene->window.height / 2 + scene->player.rays[x].line_h / 2) * step;
-		
 		int		y;
 		y = scene->player.rays[x].draw_s - 1;
 		while (++y < scene->player.rays[x].draw_e)
@@ -92,5 +109,14 @@ int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 			scene->window.img_data[y * (int)scene->window.width + x] = color;
 		}
 	}
+	printf("---------------------------------------------\n");
+	printf("pos: %f, %f\n", scene->player.rays[0].pos_x, scene->player.rays[0].pos_y);
+	printf("spd: %f\n", scene->player.move_speed);
+	printf("dist: %f\n", scene->player.rays[0].perp_wall_dist);
+	printf("dir: %f, %f\n", scene->player.rays[0].dir_x, scene->player.rays[0].dir_x);
+	printf("map: %d, %d\n", map_x, map_y);
+	printf("side: %f, %f\n", scene->player.rays[0].side_dist_x, scene->player.rays[0].side_dist_y);
+	printf("step: %d, %d\n", step_x, step_y);
+	printf("----------------------------------------------\n");
 	return (1);
 }

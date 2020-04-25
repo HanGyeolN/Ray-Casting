@@ -81,6 +81,8 @@ typedef struct		s_player
 	double	pos_y;
 	double	dir_x;
 	double	dir_y;
+	double	move_speed;
+	double	rot_speed;
 	double	rad;
 	t_ray	*rays;
 }					t_player;
