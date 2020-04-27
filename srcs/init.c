@@ -73,19 +73,22 @@ int		init_player(t_player *player, t_cub *cub, t_map *map)
 	player->pos_x = (double)cub->player_x;
 	player->pos_y = (double)cub->player_y;
 	player->rad = cub->player_dir;
-	player->dir_x = cos(player->rad * PI / 180); // -1
-	player->dir_y = sin(player->rad * PI / 180); // 0
 	printf("x, y : %f, %f\n", player->dir_x, player->dir_y);
 	player->move_speed = 0.1;
 	player->rot_speed = 0.1;
 	player->plane_x = 0.0; //
 	player->plane_y = 0.66; //
 	double	old_plane_x, plane_x, plane_y;
+	double	rad;
+	player->rad = player->rad;
+	player->dir_x = cos(player->rad * PI / 180); // -1
+	player->dir_y = sin(player->rad * PI / 180); // 0
+	rad = 90.0;
 	plane_x = player->plane_x;
 	plane_y = player->plane_y;
 	old_plane_x = plane_x;
-	player->plane_x = plane_x * cos(player->rad * PI / 180) - plane_y * sin(player->rad * PI / 180);
-	player->plane_y = old_plane_x * sin(player->rad * PI / 180) + plane_y * cos(player->rad * PI / 180);
+	player->plane_x = plane_x * cos(rad * PI / 180) - plane_y * sin(rad * PI / 180);
+	player->plane_y = old_plane_x * sin(rad * PI / 180) + plane_y * cos(rad * PI / 180);
 	if (!(player->rays = malloc(sizeof(t_ray) * cub->res_w)))
 		return (0);
 	while (i < cub->res_w)

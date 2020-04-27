@@ -39,8 +39,8 @@ int		press_key(int key, t_scene *scene)
 			double	dir_x, dir_y;
 			double	theta;
 			theta = 90.0 * PI / 180;
-			dir_x = scene->player.dir_x * cos(theta) + scene->player.dir_y * sin(theta);
-			dir_y = scene->player.dir_x * -sin(theta) + scene->player.dir_y * cos(theta);
+			dir_x = scene->player.dir_x * cos(theta) - scene->player.dir_y * sin(theta);
+			dir_y = scene->player.dir_x * sin(theta) + scene->player.dir_y * cos(theta);
 			if (scene->map.map[(int)scene->player.pos_y][(int)(scene->player.pos_x + dir_x * scene->player.move_speed)] != '1')
 				scene->player.pos_x += dir_x * scene->player.move_speed;
 			if (scene->map.map[(int)(scene->player.pos_y + dir_y * scene->player.move_speed)][(int)scene->player.pos_x] != '1')
@@ -56,8 +56,8 @@ int		press_key(int key, t_scene *scene)
 			double	dir_x, dir_y;
 			double	theta;
 			theta = -90.0 * PI / 180;
-			dir_x = scene->player.dir_x * cos(theta) + scene->player.dir_y * sin(theta);
-			dir_y = scene->player.dir_x * -sin(theta) + scene->player.dir_y * cos(theta);
+			dir_x = scene->player.dir_x * cos(theta) - scene->player.dir_y * sin(theta);
+			dir_y = scene->player.dir_x * sin(theta) + scene->player.dir_y * cos(theta);
 			if (scene->map.map[(int)scene->player.pos_y][(int)(scene->player.pos_x + dir_x * scene->player.move_speed)] != '1')
 				scene->player.pos_x += dir_x * scene->player.move_speed;
 			if (scene->map.map[(int)(scene->player.pos_y + dir_y * scene->player.move_speed)][(int)scene->player.pos_x] != '1')
@@ -78,8 +78,8 @@ int		press_key(int key, t_scene *scene)
 			dir_y = scene->player.dir_y;
 			rot_speed = scene->player.rot_speed;
 			old_dir_x = dir_x;
-			dir_x = dir_x * cos(-rot_speed) - dir_y * sin(-rot_speed);
-			dir_y = old_dir_x * sin(-rot_speed) + dir_y * cos(-rot_speed);
+			dir_x = dir_x * cos(rot_speed) - dir_y * sin(rot_speed);
+			dir_y = old_dir_x * sin(rot_speed) + dir_y * cos(rot_speed);
 
 			scene->player.dir_x = dir_x;
 			scene->player.dir_y = dir_y;
@@ -88,8 +88,8 @@ int		press_key(int key, t_scene *scene)
 			plane_x = scene->player.plane_x;
 			plane_y = scene->player.plane_y;
 			old_plane_x = plane_x;
-			plane_x = plane_x * cos(-rot_speed) - plane_y * sin(-rot_speed);
-			plane_y = old_plane_x * sin(-rot_speed) + plane_y * cos(-rot_speed);
+			plane_x = plane_x * cos(rot_speed) - plane_y * sin(rot_speed);
+			plane_y = old_plane_x * sin(rot_speed) + plane_y * cos(rot_speed);
 			scene->player.plane_x = plane_x;
 			scene->player.plane_y = plane_y;
 		}
@@ -100,8 +100,8 @@ int		press_key(int key, t_scene *scene)
 			dir_y = scene->player.dir_y;
 			rot_speed = -scene->player.rot_speed;
 			old_dir_x = dir_x;
-			dir_x = dir_x * cos(-rot_speed) - dir_y * sin(-rot_speed);
-			dir_y = old_dir_x * sin(-rot_speed) + dir_y * cos(-rot_speed);
+			dir_x = dir_x * cos(rot_speed) - dir_y * sin(rot_speed);
+			dir_y = old_dir_x * sin(rot_speed) + dir_y * cos(rot_speed);
 
 			scene->player.dir_x = dir_x;
 			scene->player.dir_y = dir_y;
@@ -110,8 +110,8 @@ int		press_key(int key, t_scene *scene)
 			plane_x = scene->player.plane_x;
 			plane_y = scene->player.plane_y;
 			old_plane_x = plane_x;
-			plane_x = plane_x * cos(-rot_speed) - plane_y * sin(-rot_speed);
-			plane_y = old_plane_x * sin(-rot_speed) + plane_y * cos(-rot_speed);
+			plane_x = plane_x * cos(rot_speed) - plane_y * sin(rot_speed);
+			plane_y = old_plane_x * sin(rot_speed) + plane_y * cos(rot_speed);
 			scene->player.plane_x = plane_x;
 			scene->player.plane_y = plane_y;
 		}

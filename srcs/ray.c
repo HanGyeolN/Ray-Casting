@@ -105,17 +105,17 @@ int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 			color = scene->texture.n_data[tex_y][tex_x];
 			if (scene->player.rays[x].side == 1)
 				color = (color >> 1) & 8355711;
-			scene->window.img_data[y * (int)scene->window.width + x] = color;
+			scene->window.img_data[y * (int)scene->window.width + ((int)scene->window.width - x - 1)] = color;
 		}
 		y = -1;
 		while (++y < scene->player.rays[x].draw_s)
 		{
-			scene->window.img_data[y * (int)scene->window.width + x] = scene->c_color;
+			scene->window.img_data[y * (int)scene->window.width + ((int)scene->window.width - x - 1)] = scene->c_color;
 		}
 		y = scene->player.rays[x].draw_e - 1;
 		while (++y < scene->window.height)
 		{
-			scene->window.img_data[y * (int)scene->window.width + x] = scene->f_color;
+			scene->window.img_data[y * (int)scene->window.width + ((int)scene->window.width - x - 1)] = scene->f_color;
 		}
 	}
 
