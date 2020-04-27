@@ -66,6 +66,16 @@ int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 				scene->player.rays[x].hit_type = '1';
 			}
 		}
+
+		// cardinal calc
+		if (scene->player.rays[x].side == 1 && scene->player.rays[x].dir_y >= 0)
+			scene->player.rays[x].cardinal = 0;
+		else if (scene->player.rays[x].side == 1 && scene->player.rays[x].dir_y < 0)
+			scene->player.rays[x].cardinal = 2;
+		else if (scene->player.rays[x].side == 0 && scene->player.rays[x].dir_x >= 0)
+			scene->player.rays[x].cardinal = 3;
+		else if (scene->player.rays[x].side == 0 && scene->player.rays[x].dir_x < 0)
+			scene->player.rays[x].cardinal = 1;
 		
 		// drawing
 		scene->player.rays[x].perp_wall_dist = (scene->player.rays[x].side == 0) ? \
@@ -102,7 +112,14 @@ int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 			int		tex_y, color;
 			tex_y = y * 256 - (int)scene->window.height * 128 + scene->player.rays[x].line_h * 128;
 			tex_y = ((tex_y * TEXTURE_H) / scene->player.rays[x].line_h) / 256;
-			color = scene->texture.n_data[tex_y][tex_x];
+			if (scene->player.rays[x].cardinal == 0)
+				color = scene->texture.n_data[tex_y][tex_x];
+			else if (scene->player.rays[x].cardinal == 1)
+				color = scene->texture.e_data[tex_y][tex_x];
+			else if (scene->player.rays[x].cardinal == 2)
+				color = scene->texture.s_data[tex_y][tex_x];
+			else if (scene->player.rays[x].cardinal == 3)
+				color = scene->texture.w_data[tex_y][tex_x];
 			if (scene->player.rays[x].side == 1)
 				color = (color >> 1) & 8355711;
 			scene->window.img_data[y * (int)scene->window.width + ((int)scene->window.width - x - 1)] = color;

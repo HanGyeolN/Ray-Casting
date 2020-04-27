@@ -69,6 +69,7 @@ typedef struct		s_ray
 	int		draw_e;
 	int		color;
 	int		side;
+	int		cardinal;
 	int		hit;
 	char	hit_type;
 }					t_ray;
