@@ -2,17 +2,85 @@
 
 int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 {
-	int		x;
+	int		x, y;
 	int		map_x;
 	int		map_y;
 	double	camera_x;
 	int		step_x;
 	int		step_y;
 	int		hit;
+	int		color;
 
 	x = -1;
+	y = -1;
 	if (!rays)
 		return (0);
+	// floor casting
+	float	ray_dir_x0, ray_dir_x1, ray_dir_y0, ray_dir_y1;
+	int		p;
+	float	pos_z;
+	float	row_dist;
+	float	f_stepx, f_stepy;
+	float	floor_x, floor_y;
+	int cell_x, cell_y;
+	int	tx, ty;
+	while (++y < scene->window.height)
+	{
+		ray_dir_x0 = (scene->player.dir_x + scene->player.plane_x); // -1 0
+		ray_dir_y0 = (scene->player.dir_y + scene->player.plane_y); // 0 0.66
+		ray_dir_x1 = (scene->player.dir_x - scene->player.plane_x);
+		ray_dir_y1 = (scene->player.dir_y - scene->player.plane_y);
+		
+		p = y - scene->window.height / 2;
+	
+		pos_z = 0.5 * scene->window.height;
+
+		row_dist = pos_z / p;
+
+		f_stepx = row_dist * (ray_dir_x1 - ray_dir_x0) / scene->window.width;
+		f_stepy = row_dist * (ray_dir_y1 - ray_dir_y0) / scene->window.width;
+
+		floor_x = scene->player.pos_x + row_dist * ray_dir_x0;
+		floor_y = scene->player.pos_y + row_dist * ray_dir_y0;
+
+		x = -1;
+		while (++x < scene->window.width)
+		{
+			cell_x = (int)floor_x;
+			cell_y = (int)floor_y;
+
+			// tx = (int)(TEXTURE_W * (floor_x - cell_x));
+			// while (tx >= TEXTURE_W)
+			// 	tx -= 1;
+			// ty = (int)(TEXTURE_H * (floor_y - cell_y));
+			// while (ty >= TEXTURE_H)
+			// 	ty -= 1;
+
+			//tx = (int)fabs((TEXTURE_W - 1) * (floor_x - cell_x));// & (TEXTURE_W - 1);
+			//ty = (int)fabs((TEXTURE_H - 1) * (floor_y - cell_y));// & (TEXTURE_H - 1);
+			
+			tx = (int)(TEXTURE_W * (floor_x - cell_x));
+			if (tx < 0 || tx > 50)
+				tx = 0;
+			ty = (int)(TEXTURE_H * (floor_y - cell_y));
+			if (ty < 0 || ty > 50)
+				ty = 0;
+			//printf("%d %d\n", ty, tx);
+			floor_x += f_stepx;
+			floor_y += f_stepy;
+			//printf("%d, %d\n", ty, tx);
+			color = scene->texture.f_data[ty][tx];
+			//printf("texture[%d][%d]\n", ty, tx);
+			//printf("%x\n", color);
+			//color = (color >> 1) & 8355711;
+			scene->window.img_data[(int)(scene->window.width * y + x)] = color;
+			scene->window.img_data[(int)(scene->window.width * ((int)scene->window.height - y - 1) + x)] = color;
+		}
+	}
+
+	// wall casting
+	x = -1;
+	y = -1;
 	while (++x < scene->window.width)
 	{
 		hit = 0;
@@ -105,11 +173,10 @@ int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 		step = 1.0 * TEXTURE_H / scene->player.rays[x].line_h;
 		double	tex_pos;
 		tex_pos = (scene->player.rays[x].draw_s - scene->window.height / 2 + scene->player.rays[x].line_h / 2) * step;
-		int		y;
 		y = scene->player.rays[x].draw_s - 1;
 		while (++y < scene->player.rays[x].draw_e)
 		{
-			int		tex_y, color;
+			int		tex_y;
 			tex_y = y * 256 - (int)scene->window.height * 128 + scene->player.rays[x].line_h * 128;
 			tex_y = ((tex_y * TEXTURE_H) / scene->player.rays[x].line_h) / 256;
 			if (scene->player.rays[x].cardinal == 0)
@@ -124,16 +191,17 @@ int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 				color = (color >> 1) & 8355711;
 			scene->window.img_data[y * (int)scene->window.width + ((int)scene->window.width - x - 1)] = color;
 		}
-		y = -1;
-		while (++y < scene->player.rays[x].draw_s)
-		{
-			scene->window.img_data[y * (int)scene->window.width + ((int)scene->window.width - x - 1)] = scene->c_color;
-		}
-		y = scene->player.rays[x].draw_e - 1;
-		while (++y < scene->window.height)
-		{
-			scene->window.img_data[y * (int)scene->window.width + ((int)scene->window.width - x - 1)] = scene->f_color;
-		}
+		// floor color
+		// y = -1;
+		// while (++y < scene->player.rays[x].draw_s)
+		// {
+		// 	scene->window.img_data[y * (int)scene->window.width + ((int)scene->window.width - x - 1)] = scene->c_color;
+		// }
+		// y = scene->player.rays[x].draw_e - 1;
+		// while (++y < scene->window.height)
+		// {
+		// 	scene->window.img_data[y * (int)scene->window.width + ((int)scene->window.width - x - 1)] = scene->f_color;
+		// }
 	}
 
 	// printf("---------------------------------------------\n");

@@ -109,12 +109,14 @@ typedef struct		s_texture
 	void	*s;
 	void	*w;
 	void	*e;
+	void	*f;
 	void	*i;
 	int		(*n_data)[TEXTURE_SIZE];
 	int		(*s_data)[TEXTURE_SIZE];
 	int		(*w_data)[TEXTURE_SIZE];
 	int		(*e_data)[TEXTURE_SIZE];
-	int		(*i_data)[TEXTURE_SIZE];
+	int		(*f_data)[TEXTURE_SIZE];
+	int		(*i_data)[25];
 }					t_texture;
 
 typedef struct		s_scene
