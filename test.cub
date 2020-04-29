@@ -3,7 +3,7 @@ SO ./textures/wall_s.png
 WE ./textures/wall_w.png
 EA ./textures/wall_e.png
 
-R 800 600
+R 1920 1080
 S ./textures/sprite.png
 F 90,90,90
 C 225,226,225

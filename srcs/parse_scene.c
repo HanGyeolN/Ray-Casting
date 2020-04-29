@@ -261,11 +261,22 @@ char	**make_map(int fd, t_cub *cub, char *filename)
 	return (cub->map);
 }
 
+int		is_sprite(char n)
+{
+	if (n == '2')
+		return (1);
+	return (0);
+}
+
 int		set_player(t_cub *cub)
 {
 	int		x;
 	int		y;
+	int		sprite_cnt;
+	int		chk;
 
+	chk = 0;
+	sprite_cnt = 0;
 	y = -1;
 	while (++y < cub->map_h)
 	{
@@ -285,10 +296,20 @@ int		set_player(t_cub *cub)
 					cub->player_dir = 0.0;
 				cub->player_x = x;
 				cub->player_y = y;
-				return (1);
+				chk++;
+			}
+			if (is_sprite(cub->map[y][x]))
+			{
+				cub->sprite_x[sprite_cnt] = x;
+				cub->sprite_y[sprite_cnt] = y;
+				sprite_cnt++;
 			}
 		}
 	}
+	cub->n_sprite = sprite_cnt;
+	if (chk == 1)
+		return (1);
+	ft_printf("player initial position error\n");
 	return (0);
 }
 

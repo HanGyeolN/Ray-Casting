@@ -74,6 +74,8 @@ int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 			//printf("%x\n", color);
 			//color = (color >> 1) & 8355711;
 			scene->window.img_data[(int)(scene->window.width * y + x)] = color;
+
+			color = scene->texture.c_data[ty][tx];
 			scene->window.img_data[(int)(scene->window.width * ((int)scene->window.height - y - 1) + x)] = color;
 		}
 	}
@@ -202,8 +204,23 @@ int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 		// {
 		// 	scene->window.img_data[y * (int)scene->window.width + ((int)scene->window.width - x - 1)] = scene->f_color;
 		// }
+
+		// sprite casting
+		//scene->z_buffer[x] = scene->player.rays[x].perp_wall_dist;
 	}
 
+	// sprite casting
+	// int		n_sprites = 2;
+	// int		sprite_order[n_sprites];
+	// double	sprite_distance[n_sprites];
+	// int		i = 0;
+
+	// while (i < n_sprites)
+	// {
+	// 	sprite_order[i] = i;
+	// 	sprite_distance[i] = 
+	// }
+	
 	// printf("---------------------------------------------\n");
 	// printf("pos: %f, %f\n", scene->player.rays[0].pos_x, scene->player.rays[0].pos_y);
 	// printf("spd: %f\n", scene->player.move_speed);

@@ -30,6 +30,11 @@ void	init_map(t_window *window, t_map *map, t_cub *cub)
 	put_map_to_img(map);
 }
 
+// void	init_sprite(t_map *map, t_scene *scene)
+// {
+// 	while ()
+// }
+
 void	init_texture(t_window *window, t_texture *txr, t_cub *cub)
 {
 	int		tp;
@@ -40,6 +45,7 @@ void	init_texture(t_window *window, t_texture *txr, t_cub *cub)
 	txr->e = mlx_png_file_to_image(window->mlx_ptr, cub->tex_e, &tp, &tp);
 	txr->i = mlx_png_file_to_image(window->mlx_ptr, cub->tex_i, &tp, &tp);
 	txr->f = mlx_png_file_to_image(window->mlx_ptr, "./textures/floor.png", &tp, &tp);
+	txr->c = mlx_png_file_to_image(window->mlx_ptr, "./textures/ceiling.png", &tp, &tp);
 
 	txr->n_data = (int(*)[TEXTURE_SIZE])mlx_get_data_addr(txr->n, \
 														&tp, &tp, &tp);
@@ -52,6 +58,8 @@ void	init_texture(t_window *window, t_texture *txr, t_cub *cub)
 	txr->i_data = (int(*)[25])mlx_get_data_addr(txr->i, \
 														&tp, &tp, &tp);
 	txr->f_data = (int(*)[TEXTURE_SIZE])mlx_get_data_addr(txr->f, \
+														&tp, &tp, &tp);
+	txr->c_data = (int(*)[TEXTURE_SIZE])mlx_get_data_addr(txr->c, \
 														&tp, &tp, &tp);
 }
 
@@ -78,8 +86,8 @@ int		init_player(t_player *player, t_cub *cub, t_map *map)
 	player->pos_y = (double)cub->player_y;
 	player->rad = cub->player_dir;
 	printf("x, y : %f, %f\n", player->dir_x, player->dir_y);
-	player->move_speed = 0.3;
-	player->rot_speed = 0.1;
+	player->move_speed = 0.1;
+	player->rot_speed = 0.08;
 	player->plane_x = 0.0; //
 	player->plane_y = 0.66; //
 	double	old_plane_x, plane_x, plane_y;
@@ -144,6 +152,8 @@ int		load_scene(char *scene_path, t_scene *scene, t_cub *cub)
 	if (!(new_map(&(scene->map))))
 		return (0);
 	init_texture(&(scene->window), &(scene->texture), cub);
+	// if (init_sprite)
+	// 	return (0);
 	if (!(init_player(&(scene->player), cub, &(scene->map))))
 		return (0);
 	return (1);

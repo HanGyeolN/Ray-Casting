@@ -110,14 +110,23 @@ typedef struct		s_texture
 	void	*w;
 	void	*e;
 	void	*f;
+	void	*c;
 	void	*i;
 	int		(*n_data)[TEXTURE_SIZE];
 	int		(*s_data)[TEXTURE_SIZE];
 	int		(*w_data)[TEXTURE_SIZE];
 	int		(*e_data)[TEXTURE_SIZE];
 	int		(*f_data)[TEXTURE_SIZE];
+	int		(*c_data)[TEXTURE_SIZE];
 	int		(*i_data)[25];
 }					t_texture;
+
+typedef struct		s_sprite
+{
+	double	pos_x;
+	double	pos_y;
+	int		type;
+}					t_sprite;
 
 typedef struct		s_scene
 {
@@ -127,6 +136,7 @@ typedef struct		s_scene
 	t_player	player;
 	int			f_color;
 	int			c_color;
+	double		*z_buffer;
 }					t_scene;
 
 /*
@@ -151,6 +161,9 @@ typedef struct	s_cub
 	int		player_x;
 	int		player_y;
 	double	player_dir;
+	int		n_sprite;
+	int		sprite_x[200];
+	int		sprite_y[200];
 }				t_cub;
 
 int		is_ray_inf(t_ray *ray);
