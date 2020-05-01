@@ -26,6 +26,8 @@
 # define TEXTURE_SIZE 50
 # define TEXTURE_H 50
 # define TEXTURE_W 50
+# define SPRITE_W 25
+# define SPRITE_H 25
 
 # define PI 3.14159265
 # define KEY_W 13
@@ -92,8 +94,8 @@ typedef struct		s_map
 {
 	double	width;
 	double	height;
-	double	width_r;
-	double	height_r;
+	int		width_r;
+	int		height_r;
 	int		block_w;
 	int		block_h;
 	int		color;
@@ -118,14 +120,16 @@ typedef struct		s_texture
 	int		(*e_data)[TEXTURE_SIZE];
 	int		(*f_data)[TEXTURE_SIZE];
 	int		(*c_data)[TEXTURE_SIZE];
-	int		(*i_data)[25];
+	int		(*i_data)[SPRITE_W];
 }					t_texture;
 
 typedef struct		s_sprite
 {
-	double	pos_x;
-	double	pos_y;
-	int		type;
+	double	x;
+	double	y;
+	double	first;
+	int		second;
+	char	type;
 }					t_sprite;
 
 typedef struct		s_scene
@@ -134,8 +138,10 @@ typedef struct		s_scene
 	t_map		map;
 	t_texture	texture;
 	t_player	player;
+	t_sprite	*sprite;
 	int			f_color;
 	int			c_color;
+	int			n_sprite;
 	double		*z_buffer;
 }					t_scene;
 
@@ -165,6 +171,9 @@ typedef struct	s_cub
 	int		sprite_x[200];
 	int		sprite_y[200];
 }				t_cub;
+
+int		sprite_order[100];
+double	sprite_distance[100];
 
 int		is_ray_inf(t_ray *ray);
 int		ray_casting(t_ray **rays, t_map *map, t_scene *scene);

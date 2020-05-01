@@ -272,11 +272,9 @@ int		set_player(t_cub *cub)
 {
 	int		x;
 	int		y;
-	int		sprite_cnt;
 	int		chk;
 
 	chk = 0;
-	sprite_cnt = 0;
 	y = -1;
 	while (++y < cub->map_h)
 	{
@@ -298,15 +296,8 @@ int		set_player(t_cub *cub)
 				cub->player_y = y;
 				chk++;
 			}
-			if (is_sprite(cub->map[y][x]))
-			{
-				cub->sprite_x[sprite_cnt] = x;
-				cub->sprite_y[sprite_cnt] = y;
-				sprite_cnt++;
-			}
 		}
 	}
-	cub->n_sprite = sprite_cnt;
 	if (chk == 1)
 		return (1);
 	ft_printf("player initial position error\n");
