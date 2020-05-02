@@ -6,6 +6,22 @@ int		press_key(int key, t_scene *scene)
 	int		i;
 	int		n_ray;
 
+	if (key == KEY_ESC)
+	{
+		free(scene->z_buffer);
+		free(scene->sprite);
+		free(scene->player.rays);
+		i = 0;
+		while (i < scene->map.height)
+		{
+			free(scene->map.map_r[i]);
+			i++;
+		}
+		free(scene->map.map_r);
+		mlx_destroy_image(scene->window.mlx_ptr, scene->window.img_ptr);
+		mlx_destroy_window(scene->window.mlx_ptr, scene->window.win_ptr);
+		exit (0);
+	}
 	i = -1;
 	n_ray = (int)(scene->window).width;
 	if (key == KEY_W || key == KEY_S || key == KEY_A || key == KEY_D)

@@ -36,6 +36,7 @@
 # define KEY_D 2
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
+# define KEY_ESC 53
 
 # define SPEED_MOVE 1
 # define SPEED_ROT 2
@@ -127,8 +128,7 @@ typedef struct		s_sprite
 {
 	double	x;
 	double	y;
-	double	first;
-	int		second;
+	int		d;
 	char	type;
 }					t_sprite;
 

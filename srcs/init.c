@@ -63,8 +63,9 @@ int		init_sprite(t_map *map, t_scene *scene)
 		{
 			if (map->map_r[i][j] == '2')
 			{
-				scene->sprite[cnt].y = (double)i;
-				scene->sprite[cnt].x = (double)j;
+				scene->sprite[cnt].d = 1;
+				scene->sprite[cnt].y = (double)i + 0.5;
+				scene->sprite[cnt].x = (double)j + 0.5;
 				scene->sprite[cnt].type = map->map_r[i][j];
 				cnt++;
 			}
@@ -105,8 +106,8 @@ void	init_texture(t_window *window, t_texture *txr, t_cub *cub)
 void	init_ray(t_ray *ray, double x, double y, double rad)
 {
 	ray->color = 0xFFFFFF;
-	ray->pos_x = x;
-	ray->pos_y = y;
+	ray->pos_x = x + 0.5;
+	ray->pos_y = y + 0.5;
 	ray->rad = rad;
 	ray->hit = 0;
 	ray->hit_type = '0';
@@ -121,8 +122,8 @@ int		init_player(t_player *player, t_cub *cub, t_map *map)
 		return (0);
 	cub->player_x = cub->player_x;
 	cub->player_y = cub->player_y;
-	player->pos_x = (double)cub->player_x;
-	player->pos_y = (double)cub->player_y;
+	player->pos_x = (double)cub->player_x + 0.5;
+	player->pos_y = (double)cub->player_y + 0.5;
 	player->rad = cub->player_dir;
 	printf("x, y : %f, %f\n", player->dir_x, player->dir_y);
 	player->move_speed = 0.1;
