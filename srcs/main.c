@@ -32,7 +32,7 @@ int		close_game(t_scene *scene)
 	exit (0);
 }
 
-int		main(void)
+int		main(int argc, char **argv)
 {
 	t_scene		scene;
 	t_cub		cub;
@@ -40,6 +40,12 @@ int		main(void)
 	if (!(load_scene("./test.cub", &scene, &cub)))
 		return (0);
 	ray_casting(&(scene.player.rays), &(scene.map), &scene);
+	if (argc == 2 && argv[1][0] == 's')
+	{
+		screen_shot(&scene);
+		close_game(&scene);
+		return (0);
+	}
 	render(&scene);
 	mlx_hook((scene.window).win_ptr, 2, 0, press_key, &scene);
 	mlx_hook((scene.window).win_ptr, 17, 0, close_game, &scene);
