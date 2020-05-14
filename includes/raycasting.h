@@ -41,41 +41,6 @@
 # define SPEED_MOVE 1
 # define SPEED_ROT 2
 
-# pragma pack(push, 1)
-
-typedef struct		s_bitmap_file_header
-{
-	unsigned short	bf_type;
-	unsigned int	bf_size;
-	unsigned short	bf_reserved1;
-	unsigned short	bf_reserved2;
-	unsigned int	bf_off_bits;
-}					t_bitmap_file_header;
-
-typedef struct		s_bitmap_info_header
-{
-	unsigned int	bi_size;
-	int				bi_width;
-	int				bi_height;
-	unsigned short	bi_planes;
-	unsigned short	bi_bit_count;
-	unsigned int	bi_compression;
-	unsigned int	bi_size_image;
-	int				bi_x_pels_per_meter;
-	int				bi_y_pels_per_meter;
-	unsigned int	bi_clr_used;
-	unsigned int	bit_clr_important;
-}					t_bitmap_info_header;
-
-typedef struct		s_rgb_triple
-{
-	unsigned char	rgbt_blue;
-	unsigned char	rgbt_green;
-	unsigned char	rgbt_red;
-}					t_rgb_triple;
-
-# pragma pack(pop)
-
 typedef struct		s_window
 {
 	double	width;
@@ -206,6 +171,38 @@ typedef struct	s_cub
 	int		sprite_x[200];
 	int		sprite_y[200];
 }				t_cub;
+
+typedef struct	s_bitmap_file_header
+{
+	unsigned char	bf_type[2];
+	unsigned char	bf_size[4];
+	short			bf_reserved1;
+	short			bf_reserved2;
+	unsigned char	bf_off_bits[4];
+}				t_bitmap_file_header;
+
+typedef struct	s_bitmap_info_header
+{
+	int		bi_size;
+	int		bi_width;
+	int		bi_height;
+	short	bi_planes;
+	short	bi_bit_count;
+	int		bi_compression;
+	int		bi_size_image;
+	int		bi_xpels_per_meter;
+	int		bi_ypels_per_meter;
+	int		bi_clr_used;
+	int		bi_clr_important;
+}				t_bitmap_info_header;
+
+typedef struct	s_bitmap
+{
+	t_bitmap_file_header	file_header;
+	t_bitmap_info_header	info_header;
+	unsigned char			*image;
+}				t_bitmap;
+
 
 int		sprite_order[100];
 double	sprite_distance[100];
