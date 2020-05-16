@@ -183,11 +183,11 @@ typedef struct	s_bitmap_file_header
 
 typedef struct	s_bitmap_info_header
 {
-	int		bi_size;
-	int		bi_width;
-	int		bi_height;
-	short	bi_planes;
-	short	bi_bit_count;
+	unsigned char	bi_size[4];
+	unsigned char	bi_width[4];
+	unsigned char	bi_height[4];
+	unsigned char	bi_planes[2];
+	unsigned char	bi_bit_count[2];
 	int		bi_compression;
 	int		bi_size_image;
 	int		bi_xpels_per_meter;
@@ -217,6 +217,6 @@ int		parse_scene(char *filepath, t_cub *cub);
 int		press_key(int key, t_scene *scene);
 int		release_key(int key, t_scene *scene);
 int		load_scene(char *scene_path, t_scene *scene, t_cub *cub);
-int		screen_shot(t_scene *scene);
+int		screen_shot(int height, int width, int *img_data);
 
 #endif

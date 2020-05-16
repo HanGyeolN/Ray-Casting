@@ -15,20 +15,12 @@ void	init_window(t_window *window, int width, int height, char *title)
 
 void	init_map(t_window *window, t_map *map, t_cub *cub)
 {
-	// int		tp;
 	if (!window)
 		return ;
 	map->map = cub->map;
 	map->color = 0xFFFFFF;
 	map->width = (double)cub->map_w;
 	map->height = (double)cub->map_h;
-	// map->block_w = 10;
-	// map->block_h = 10;
-	// map->width_r = map->block_w * cub->map_w;
-	// map->height = map->block_h * cub->map_h;
-	// map->image = mlx_new_image(window->mlx_ptr, map->width_r, map->height);
-	// map->data = (int *)mlx_get_data_addr(map->image, &tp, &tp, &tp);
-	// put_map_to_img(map);
 }
 
 int		init_sprite(t_map *map, t_scene *scene)

@@ -40,9 +40,9 @@ int		main(int argc, char **argv)
 	if (!(load_scene("./test.cub", &scene, &cub)))
 		return (0);
 	ray_casting(&(scene.player.rays), &(scene.map), &scene);
-	if (argc == 2 && argv[1][0] == 's')
+	if (argc == 2 && ft_strcmp(argv[1], "--save") == 0)
 	{
-		screen_shot(&scene);
+		screen_shot(scene.window.height, scene.window.width, scene.window.img_data);
 		close_game(&scene);
 		return (0);
 	}
