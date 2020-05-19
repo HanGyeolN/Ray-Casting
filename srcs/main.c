@@ -23,7 +23,7 @@ int		error(char *error_msg)
 int		close_game(t_scene *scene)
 {
 	int		i;
-	ft_printf("Red cross button pushed\n");
+
 	free(scene->z_buffer);
 	free(scene->sprite);
 	free(scene->player.rays);

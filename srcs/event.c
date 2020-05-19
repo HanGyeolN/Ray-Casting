@@ -137,11 +137,3 @@ int		press_key(int key, t_scene *scene)
 	ft_printf("press_key : %d\n", key);
 	return (0);
 }
-
-int		release_key(int key, t_scene *scene)
-{
-	if (!scene)
-		return (0);
-	ft_printf("release_key : %d\n", key);
-	return (1);
-}

@@ -129,7 +129,7 @@ int		init_player(t_player *player, t_cub *cub, t_map *map)
 	if (player->dir_x > -0.001 && player->dir_x < 0.001)
 		player->dir_x = 0;
 	player->dir_y = sin(player->rad * PI / 180); // 0
-	rad = 90.0;
+	rad = player->rad;
 	plane_x = player->plane_x;
 	plane_y = player->plane_y;
 	old_plane_x = plane_x;

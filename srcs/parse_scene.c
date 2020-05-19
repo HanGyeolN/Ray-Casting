@@ -263,13 +263,6 @@ char	**make_map(int fd, t_cub *cub, char *filename)
 	return (cub->map);
 }
 
-int		is_sprite(char n)
-{
-	if (n == '2')
-		return (1);
-	return (0);
-}
-
 int		set_player(t_cub *cub)
 {
 	int		x;

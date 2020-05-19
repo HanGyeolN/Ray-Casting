@@ -213,7 +213,6 @@ int		sprite_order[100];
 double	sprite_distance[100];
 
 int		ray_casting(t_ray **rays, t_map *map, t_scene *scene);
-int		put_map_to_img(t_map *map);
 void	render(t_scene *scene);
 char	**make_map(int fd, t_cub *cub, char *filename);
 int		parse_scene(char *filepath, t_cub *cub);
