@@ -178,6 +178,11 @@ int		new_map(t_map *map)
 
 int		load_scene(char *scene_path, t_scene *scene, t_cub *cub)
 {
+	int		len;
+
+	len = ft_strlen(scene_path);
+	if (ft_strcmp(&scene_path[len - 4], ".cub") != 0)
+		return (0);
 	parse_scene(scene_path, cub);
 	scene->f_color = cub->color_f;
 	scene->c_color = cub->color_c;

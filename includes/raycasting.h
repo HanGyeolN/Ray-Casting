@@ -41,6 +41,12 @@
 # define SPEED_MOVE 1
 # define SPEED_ROT 2
 
+# define MAX_SC_W 1920
+# define MIN_SC_W 400
+# define MAX_SC_H 1080
+# define MIN_SC_H 280
+
+
 typedef struct		s_window
 {
 	double	width;
@@ -218,5 +224,6 @@ int		press_key(int key, t_scene *scene);
 int		release_key(int key, t_scene *scene);
 int		load_scene(char *scene_path, t_scene *scene, t_cub *cub);
 int		screen_shot(int height, int width, int *img_data);
+int		error(char *error_msg);
 
 #endif

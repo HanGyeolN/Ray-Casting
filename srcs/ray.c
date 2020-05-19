@@ -42,6 +42,7 @@ int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 	y = -1;
 	if (!rays)
 		return (0);
+	/*
 	// floor casting
 	float	ray_dir_x0, ray_dir_x1, ray_dir_y0, ray_dir_y1;
 	int		p;
@@ -106,6 +107,7 @@ int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 			scene->window.img_data[(int)(scene->window.width * ((int)scene->window.height - y - 1) + x)] = color;
 		}
 	}
+	*/
 
 	// wall casting
 	x = -1;
@@ -220,17 +222,17 @@ int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 				color = (color >> 1) & 8355711;
 			scene->window.img_data[y * (int)scene->window.width + ((int)scene->window.width - x - 1)] = color;
 		}
-		// floor color
-		// y = -1;
-		// while (++y < scene->player.rays[x].draw_s)
-		// {
-		// 	scene->window.img_data[y * (int)scene->window.width + ((int)scene->window.width - x - 1)] = scene->c_color;
-		// }
-		// y = scene->player.rays[x].draw_e - 1;
-		// while (++y < scene->window.height)
-		// {
-		// 	scene->window.img_data[y * (int)scene->window.width + ((int)scene->window.width - x - 1)] = scene->f_color;
-		// }
+		//floor color
+		y = -1;
+		while (++y < scene->player.rays[x].draw_s)
+		{
+			scene->window.img_data[y * (int)scene->window.width + ((int)scene->window.width - x - 1)] = scene->c_color;
+		}
+		y = scene->player.rays[x].draw_e - 1;
+		while (++y < scene->window.height)
+		{
+			scene->window.img_data[y * (int)scene->window.width + ((int)scene->window.width - x - 1)] = scene->f_color;
+		}
 
 		// sprite casting
 		scene->z_buffer[x] = scene->player.rays[x].perp_wall_dist;

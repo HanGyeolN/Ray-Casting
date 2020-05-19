@@ -219,6 +219,7 @@ char	**malloc_map(char **map, int fd, t_cub *cub)
 			map_w = ft_strlen(line);
 		map_h++;
 	}
+	map_h++;
 	cub->map_w = map_w;
 	cub->map_h = map_h;
 	if (!(map = malloc(sizeof(char *) * (map_h + 1))))
@@ -257,6 +258,7 @@ char	**make_map(int fd, t_cub *cub, char *filename)
 		ft_strlcpy(cub->map[i], line, (cub->map_w + 1));
 		i++;
 	}
+	ft_strlcpy(cub->map[i], line, (cub->map_w + 1));
 	close(fd);
 	return (cub->map);
 }
@@ -336,6 +338,10 @@ int		check_resolution(char *line, t_cub *cub, int *check)
 		ft_printf("Resolution Error\n");
 		return (0);
 	}
+	if (cub->res_w > MAX_SC_W || cub->res_w < MIN_SC_W)
+		cub->res_w = (cub->res_w < MIN_SC_W) ? MIN_SC_W : MAX_SC_W;
+	if (cub->res_h > MAX_SC_H || cub->res_h < MIN_SC_H)
+		cub->res_h = (cub->res_h < MIN_SC_H) ? MIN_SC_H : MAX_SC_H;
 	return (1);
 }
 
@@ -359,13 +365,158 @@ int		check_color(char *line, t_cub *cub, int *check)
 	return (1);
 }
 
+int		get_steps(t_cub *cub)
+{
+	int		steps;
+	int		c;
+
+	steps = 0;
+	c = 0;
+	while (cub->map[0][c] == '1')
+		c++;
+	while (cub->map[0][c] != '1')
+	{
+		c++;
+		steps++;
+	}
+	return (steps);
+}
+
+int		convert_map(t_cub *cub)
+{
+	int		r;
+	int		c;
+	int		t;
+	int		check;
+
+	r = 0;
+	while (r < cub->map_h)
+	{
+		c = 0;
+		while (c < cub->map_w)
+		{
+			check = 0;
+			t = 1;
+			if (cub->map[r][c] == ' ')
+			{
+				while (c + t < cub->map_w && c - t >= 0)
+				{
+					if ((cub->map[r][c + t] != '1' && cub->map[r][c + t] != ' ') || (cub->map[r][c - t] != '1' && cub->map[r][c - t] != ' '))
+					{
+						cub->map[r][c] = '0';
+						check = 1;
+						break;
+					}
+					t++;
+				}
+				if (check == 0)
+					cub->map[r][c] = '1';
+			}
+			c++;
+		}
+		r++;
+	}
+	return (0);
+}
+
+int		is_valid_horizontal(t_cub *cub)
+{
+	int		r;
+	int		c;
+	int		right;
+	int		check;
+
+	r = 0;
+	check = 0;
+	
+	while (r < cub->map_h)
+	{
+		c = 0;
+		while (c < cub->map_w)
+		{
+			if (cub->map[r][c] == '1')
+			{
+				check = 0;
+				right = cub->map_w - 1;
+				while (right > c)
+				{
+					if (cub->map[r][right] == '1')
+					{
+						check = 1;
+						break;
+					}
+					else if (cub->map[r][right] != '1' && cub->map[r][right] != ' ')
+						return (0);
+					right--;
+				}
+				if (check == 1)
+					break;
+				else
+					return (0);
+			}
+			c++;
+		}
+		r++;
+	}
+	return (1);
+}
+
+int		is_valid_vertical(t_cub *cub)
+{
+	int		r;
+	int		c;
+	int		bottom;
+	int		check;
+
+	c = 0;
+	check = 0;
+	while (c < cub->map_w)
+	{
+		r = 0;
+		while (r < cub->map_h)
+		{
+			if (cub->map[r][c] == '1')
+			{
+				check = 0;
+				bottom = cub->map_h - 1;
+				while (bottom > r)
+				{
+					if (cub->map[bottom][c] == '1')
+					{
+						check = 1;
+						break;
+					}
+					else if (cub->map[bottom][c] != '1' && cub->map[bottom][c] != ' ')
+						return (0);
+					bottom--;
+				}
+				if (check == 1)
+					break;
+				else
+					return (0);
+			}
+			r++;
+		}
+		c++;
+	}
+	return (1);
+}
+
+int		is_valid_map(t_cub *cub)
+{
+	if (!(is_valid_vertical(cub)) || !(is_valid_horizontal(cub)))
+		return (0);
+	return (1);
+}
+
 int		check_map(int fd, t_cub *cub, char *filepath)
 {
-	if (!(make_map(fd, cub, filepath)) || !(set_player(cub)))
-	{
-		ft_printf("map error\n");
-		return (0);
-	}
+	if (!(make_map(fd, cub, filepath)))
+		return (error("make_map error"));
+	convert_map(cub);
+	if (!(is_valid_map(cub)))
+		return (error("Not a valid map"));
+	set_player(cub);
 	return (1);
 }
 

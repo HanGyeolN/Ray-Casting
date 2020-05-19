@@ -13,6 +13,13 @@
 #include "raycasting.h"
 #include "libft.h"
 
+int		error(char *error_msg)
+{
+	ft_printf("Error\n");
+	ft_printf("%s\n", error_msg);
+	return (0);
+}
+
 int		close_game(t_scene *scene)
 {
 	int		i;
@@ -37,10 +44,12 @@ int		main(int argc, char **argv)
 	t_scene		scene;
 	t_cub		cub;
 
-	if (!(load_scene("./test.cub", &scene, &cub)))
-		return (0);
+	if (argc != 2 && argc != 3)
+		return (error("Usage: ./cub3D <.cub filepath>"));
+	if (!(load_scene(argv[1], &scene, &cub)))
+		return (error(".cub misconfiguration"));
 	ray_casting(&(scene.player.rays), &(scene.map), &scene);
-	if (argc == 2 && ft_strcmp(argv[1], "--save") == 0)
+	if (argc == 3 && ft_strcmp(argv[2], "--save") == 0)
 	{
 		screen_shot(scene.window.height, scene.window.width, scene.window.img_data);
 		close_game(&scene);
