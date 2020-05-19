@@ -213,10 +213,8 @@ typedef struct	s_bitmap
 int		sprite_order[100];
 double	sprite_distance[100];
 
-int		is_ray_inf(t_ray *ray);
 int		ray_casting(t_ray **rays, t_map *map, t_scene *scene);
 int		put_map_to_img(t_map *map);
-void	convert_3d(t_window *window, t_ray *ray, int i, char mode, t_scene *scene);
 void	render(t_scene *scene);
 char	**make_map(int fd, t_cub *cub, char *filename);
 int		parse_scene(char *filepath, t_cub *cub);
