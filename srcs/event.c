@@ -14,10 +14,10 @@ int		press_key(int key, t_scene *scene)
 		i = 0;
 		while (i < scene->map.height)
 		{
-			free(scene->map.map_r[i]);
+			free(scene->map.map[i]);
 			i++;
 		}
-		free(scene->map.map_r);
+		free(scene->map.map);
 		mlx_destroy_image(scene->window.mlx_ptr, scene->window.img_ptr);
 		mlx_destroy_window(scene->window.mlx_ptr, scene->window.win_ptr);
 		exit (0);

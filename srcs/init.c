@@ -36,7 +36,7 @@ int		init_sprite(t_map *map, t_scene *scene)
 		j = 0;
 		while (j < map->width)
 		{
-			if (map->map_r[i][j] == '2')
+			if (map->map[i][j] == '2')
 				cnt++;
 			j++;
 		}
@@ -53,12 +53,12 @@ int		init_sprite(t_map *map, t_scene *scene)
 		j = 0;
 		while (j < map->width)
 		{
-			if (map->map_r[i][j] == '2')
+			if (map->map[i][j] == '2')
 			{
 				scene->sprite[cnt].d = 1;
 				scene->sprite[cnt].y = (double)i + 0.5;
 				scene->sprite[cnt].x = (double)j + 0.5;
-				scene->sprite[cnt].type = map->map_r[i][j];
+				scene->sprite[cnt].type = map->map[i][j];
 				cnt++;
 			}
 			j++;
@@ -148,34 +148,6 @@ int		init_player(t_player *player, t_cub *cub, t_map *map)
 	return (1);
 }
 
-int		new_map(t_map *map)
-{
-	int		i;
-	int		j;
-
-	i = -1;
-	if (!(map->map_r = malloc(sizeof(char *) * (map->height) + 1)))
-		return (0);
-	while (++i < map->height)
-	{
-		if (!(map->map_r[i] = malloc(sizeof(char) * (map->width) + 1)))
-			return (0);
-		map->map_r[i][(int)map->width] = 0;
-	}
-	map->map_r[i] = 0;
-	i = -1;
-	while (++i < map->height)
-	{
-		j = 0;
-		while (j < map->width)
-		{
-			map->map_r[i][j] = map->map[i][j];
-			j++;
-		}
-	}
-	return (1);
-}
-
 int		load_scene(char *scene_path, t_scene *scene, t_cub *cub)
 {
 	int		len;
@@ -188,8 +160,6 @@ int		load_scene(char *scene_path, t_scene *scene, t_cub *cub)
 	scene->c_color = cub->color_c;
 	init_window(&(scene->window), cub->res_w, cub->res_h, "cub3d");
 	init_map(&(scene->window), &(scene->map), cub);
-	if (!(new_map(&(scene->map))))
-		return (0);
 	init_texture(&(scene->window), &(scene->texture), cub);
 	if (!(init_sprite(&(scene->map), scene)))
 		return (0);

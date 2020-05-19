@@ -107,7 +107,6 @@ typedef struct		s_map
 	int		block_h;
 	int		color;
 	char	**map;
-	char	**map_r;
 	void	*image;
 	int		*data;
 }					t_map;
