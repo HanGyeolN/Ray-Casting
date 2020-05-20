@@ -59,8 +59,6 @@ typedef struct		s_window
 
 typedef struct		s_ray
 {
-	double	pos_x;
-	double	pos_y;
 	double	hit_x;
 	double	hit_y;
 	double	dir_x;
@@ -221,5 +219,6 @@ int		release_key(int key, t_scene *scene);
 int		load_scene(char *scene_path, t_scene *scene, t_cub *cub);
 int		screen_shot(int height, int width, int *img_data);
 int		error(char *error_msg);
+int		close_game(t_scene *scene);
 
 #endif

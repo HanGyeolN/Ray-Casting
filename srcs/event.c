@@ -1,27 +1,18 @@
 #include "raycasting.h"
 #include <stdio.h>
 
+// void	move_front(t_scene *scene)
+// {
+	
+// }
+
 int		press_key(int key, t_scene *scene)
 {
 	int		i;
 	int		n_ray;
 
 	if (key == KEY_ESC)
-	{
-		free(scene->z_buffer);
-		free(scene->sprite);
-		free(scene->player.rays);
-		i = 0;
-		while (i < scene->map.height)
-		{
-			free(scene->map.map[i]);
-			i++;
-		}
-		free(scene->map.map);
-		mlx_destroy_image(scene->window.mlx_ptr, scene->window.img_ptr);
-		mlx_destroy_window(scene->window.mlx_ptr, scene->window.win_ptr);
-		exit (0);
-	}
+		close_game(scene);
 	i = -1;
 	n_ray = (int)(scene->window).width;
 	if (key == KEY_W || key == KEY_S || key == KEY_A || key == KEY_D)
@@ -32,11 +23,6 @@ int		press_key(int key, t_scene *scene)
 				scene->player.pos_x += scene->player.dir_x * scene->player.move_speed;
 			if (scene->map.map[(int)(scene->player.pos_y + scene->player.dir_y * scene->player.move_speed)][(int)scene->player.pos_x] != '1')
 				scene->player.pos_y += scene->player.dir_y * scene->player.move_speed;
-			while (++i < n_ray)
-			{
-				((scene->player).rays[i]).pos_x = (scene->player).pos_x;
-				((scene->player).rays[i]).pos_y = (scene->player).pos_y;
-			}
 		}
 		if (key == KEY_S)
 		{
@@ -44,11 +30,6 @@ int		press_key(int key, t_scene *scene)
 				scene->player.pos_x -= scene->player.dir_x * scene->player.move_speed;
 			if (scene->map.map[(int)(scene->player.pos_y - scene->player.dir_y * scene->player.move_speed)][(int)scene->player.pos_x] != '1')
 				scene->player.pos_y -= scene->player.dir_y * scene->player.move_speed;
-			while (++i < n_ray)
-			{
-				((scene->player).rays[i]).pos_x = (scene->player).pos_x;
-				((scene->player).rays[i]).pos_y = (scene->player).pos_y;
-			}
 		}
 		else if (key == KEY_D)
 		{
@@ -61,11 +42,6 @@ int		press_key(int key, t_scene *scene)
 				scene->player.pos_x += dir_x * scene->player.move_speed;
 			if (scene->map.map[(int)(scene->player.pos_y + dir_y * scene->player.move_speed)][(int)scene->player.pos_x] != '1')
 				scene->player.pos_y += dir_y * scene->player.move_speed;
-			while (++i < n_ray)
-			{
-				((scene->player).rays[i]).pos_x = (scene->player).pos_x;
-				((scene->player).rays[i]).pos_y = (scene->player).pos_y;
-			}
 		}
 		else if (key == KEY_A)
 		{
@@ -78,11 +54,6 @@ int		press_key(int key, t_scene *scene)
 				scene->player.pos_x += dir_x * scene->player.move_speed;
 			if (scene->map.map[(int)(scene->player.pos_y + dir_y * scene->player.move_speed)][(int)scene->player.pos_x] != '1')
 				scene->player.pos_y += dir_y * scene->player.move_speed;
-			while (++i < n_ray)
-			{
-				((scene->player).rays[i]).pos_x = (scene->player).pos_x;
-				((scene->player).rays[i]).pos_y = (scene->player).pos_y;
-			}
 		}
 	}
 	else if (key == KEY_LEFT || key == KEY_RIGHT)

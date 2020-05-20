@@ -95,11 +95,9 @@ void	init_texture(t_window *window, t_texture *txr, t_cub *cub)
 														&tp, &tp, &tp);
 }
 
-void	init_ray(t_ray *ray, double x, double y, double rad)
+void	init_ray(t_ray *ray, double rad)
 {
 	ray->color = 0xFFFFFF;
-	ray->pos_x = x + 0.5;
-	ray->pos_y = y + 0.5;
 	ray->rad = rad;
 	ray->hit = 0;
 	ray->hit_type = '0';
@@ -139,9 +137,7 @@ int		init_player(t_player *player, t_cub *cub, t_map *map)
 		return (0);
 	while (i < cub->res_w)
 	{
-		init_ray(&(player->rays[i]), 
-					(double)cub->player_x,
-					(double)cub->player_y,
+		init_ray(&(player->rays[i]),
 					player->rad + ((60.0 / (double)(cub->res_w - 1)) * (double)i) - 30.0);
 		i++;
 	}

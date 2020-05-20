@@ -118,30 +118,30 @@ int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 		camera_x = 2 * x / (double)scene->window.width - 1;
 		scene->player.rays[x].dir_x = scene->player.dir_x + scene->player.plane_x * camera_x;
 		scene->player.rays[x].dir_y = scene->player.dir_y + scene->player.plane_y * camera_x;
-		map_x = (int)scene->player.rays[x].pos_x;
-		map_y = (int)scene->player.rays[x].pos_y;
+		map_x = (int)scene->player.pos_x;
+		map_y = (int)scene->player.pos_y;
 		scene->player.rays[x].delta_dist_x = fabs(1 / scene->player.rays[x].dir_x);
 		scene->player.rays[x].delta_dist_y = fabs(1 / scene->player.rays[x].dir_y);
 
 		if (scene->player.rays[x].dir_x < 0)
 		{
 			step_x = -1;
-			scene->player.rays[x].side_dist_x = (scene->player.rays[x].pos_x - map_x) * scene->player.rays[x].delta_dist_x;
+			scene->player.rays[x].side_dist_x = (scene->player.pos_x - map_x) * scene->player.rays[x].delta_dist_x;
 		}
 		else
 		{
 			step_x = 1;
-			scene->player.rays[x].side_dist_x = (map_x + 1.0 - scene->player.rays[x].pos_x) * scene->player.rays[x].delta_dist_x;
+			scene->player.rays[x].side_dist_x = (map_x + 1.0 - scene->player.pos_x) * scene->player.rays[x].delta_dist_x;
 		}
 		if (scene->player.rays[x].dir_y < 0)
 		{
 			step_y = -1;
-			scene->player.rays[x].side_dist_y = (scene->player.rays[x].pos_y - map_y) * scene->player.rays[x].delta_dist_y;
+			scene->player.rays[x].side_dist_y = (scene->player.pos_y - map_y) * scene->player.rays[x].delta_dist_y;
 		}
 		else
 		{
 			step_y = 1;
-			scene->player.rays[x].side_dist_y = (map_y + 1.0 - scene->player.rays[x].pos_y) * scene->player.rays[x].delta_dist_y;
+			scene->player.rays[x].side_dist_y = (map_y + 1.0 - scene->player.pos_y) * scene->player.rays[x].delta_dist_y;
 		}
 
 		// dda
@@ -178,8 +178,8 @@ int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 		
 		// drawing
 		scene->player.rays[x].perp_wall_dist = (scene->player.rays[x].side == 0) ? \
-			((map_x - scene->player.rays[x].pos_x + (1 - step_x) / 2) / scene->player.rays[x].dir_x) :
-			((map_y - scene->player.rays[x].pos_y + (1 - step_y) / 2) / scene->player.rays[x].dir_y);
+			((map_x - scene->player.pos_x + (1 - step_x) / 2) / scene->player.rays[x].dir_x) :
+			((map_y - scene->player.pos_y + (1 - step_y) / 2) / scene->player.rays[x].dir_y);
 		scene->player.rays[x].line_h = (int)(scene->window.height / (scene->player.rays[x].perp_wall_dist));
 		scene->player.rays[x].draw_s = -(scene->player.rays[x].line_h) / 2 + scene->window.height / 2;
 		if (scene->player.rays[x].draw_s < 0)
@@ -188,8 +188,8 @@ int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 		if (scene->player.rays[x].draw_e >= scene->window.height)
 			scene->player.rays[x].draw_e = scene->window.height - 1;
 		scene->player.rays[x].wall_x = (scene->player.rays[x].side == 0) ? \
-			(scene->player.rays[x].pos_y + scene->player.rays[x].perp_wall_dist * scene->player.rays[x].dir_y) :
-			(scene->player.rays[x].pos_x + scene->player.rays[x].perp_wall_dist * scene->player.rays[x].dir_x);
+			(scene->player.pos_y + scene->player.rays[x].perp_wall_dist * scene->player.rays[x].dir_y) :
+			(scene->player.pos_x + scene->player.rays[x].perp_wall_dist * scene->player.rays[x].dir_x);
 		scene->player.rays[x].wall_x -= floor(scene->player.rays[x].wall_x);
 
 		// texture

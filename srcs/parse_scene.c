@@ -498,8 +498,6 @@ int		is_valid_vertical(t_cub *cub)
 
 int		is_valid_map(t_cub *cub)
 {
-	// if (!(is_valid_horizontal(cub)))
-	// 	return (0);
 	if (!(is_valid_vertical(cub)) || !(is_valid_horizontal(cub)))
 		return (0);
 	return (1);
