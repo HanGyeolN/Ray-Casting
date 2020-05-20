@@ -210,7 +210,7 @@ typedef struct	s_bitmap
 int		sprite_order[100];
 double	sprite_distance[100];
 
-int		ray_casting(t_ray **rays, t_map *map, t_scene *scene);
+int		ray_casting(t_map *map, t_scene *scene);
 void	render(t_scene *scene);
 char	**make_map(int fd, t_cub *cub, char *filename);
 int		parse_scene(char *filepath, t_cub *cub);
@@ -220,5 +220,12 @@ int		load_scene(char *scene_path, t_scene *scene, t_cub *cub);
 int		screen_shot(int height, int width, int *img_data);
 int		error(char *error_msg);
 int		close_game(t_scene *scene);
+
+void	move_front(t_map *map, t_player *p);
+void	move_back(t_map *map, t_player *p);
+void	move_right(t_map *map, t_player *p);
+void	move_left(t_map *map, t_player *p);
+void	rotate_right(t_player *p);
+void	rotate_left(t_player *p);
 
 #endif

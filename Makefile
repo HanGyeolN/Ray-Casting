@@ -1,8 +1,9 @@
 CC = gcc
 NAME = cub3D
 CFLAGS = -Wall -Werror -Wextra
-SRC = main.c	render.c	init.c		close_game.c\
-	  parse_scene.c	ray.c	event.c		screen_shot.c \
+SRC = main.c		render.c		init.c		close_game.c\
+	  parse_scene.c	ray.c			event.c		screen_shot.c\
+	  player_move.c	player_rotate.c
 
 SRC_DIR = srcs
 SRCS = $(addprefix $(SRC_DIR)/, $(SRC))

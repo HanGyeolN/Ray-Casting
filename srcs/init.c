@@ -115,7 +115,6 @@ int		init_player(t_player *player, t_cub *cub, t_map *map)
 	player->pos_x = (double)cub->player_x + 0.5;
 	player->pos_y = (double)cub->player_y + 0.5;
 	player->rad = cub->player_dir;
-	printf("x, y : %f, %f\n", player->dir_x, player->dir_y);
 	player->move_speed = 0.1;
 	player->rot_speed = 0.08;
 	player->plane_x = 0.0; //

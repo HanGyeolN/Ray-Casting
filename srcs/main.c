@@ -29,7 +29,7 @@ int		main(int argc, char **argv)
 		return (error("Usage: ./cub3D <.cub filepath>"));
 	if (!(load_scene(argv[1], &scene, &cub)))
 		return (error(".cub misconfiguration"));
-	ray_casting(&(scene.player.rays), &(scene.map), &scene);
+	ray_casting(&(scene.map), &scene);
 	if (argc == 3 && ft_strcmp(argv[2], "--save") == 0)
 	{
 		screen_shot(scene.window.height, scene.window.width, scene.window.img_data);

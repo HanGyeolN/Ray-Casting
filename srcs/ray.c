@@ -27,7 +27,7 @@ void	sort_sprites(int *order, double *dist, int amount)
 	}
 }
 
-int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
+int		ray_casting(t_map *map, t_scene *scene)
 {
 	int		x, y;
 	int		map_x;
@@ -40,9 +40,6 @@ int		ray_casting(t_ray **rays, t_map *map, t_scene *scene)
 
 	x = -1;
 	y = -1;
-	if (!rays)
-		return (0);
-	
 	// floor casting
 	float	ray_dir_x0, ray_dir_x1, ray_dir_y0, ray_dir_y1;
 	int		p;
