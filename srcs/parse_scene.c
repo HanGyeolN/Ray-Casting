@@ -232,6 +232,7 @@ char	**malloc_map(char **map, int fd, t_cub *cub)
 			free_map(map, map_h);
 			return (0);
 		}
+		ft_memset(map[map_h], ' ', map_w);
 		map[map_h][map_w] = '\0';
 	}
 	return (map);
@@ -255,10 +256,10 @@ char	**make_map(int fd, t_cub *cub, char *filename)
 	i = 0;
 	while (get_next_line(fd, &line))
 	{
-		ft_strlcpy(cub->map[i], line, (cub->map_w + 1));
+		ft_strncpy(cub->map[i], line, ft_strlen(line));
 		i++;
 	}
-	ft_strlcpy(cub->map[i], line, (cub->map_w + 1));
+	ft_strncpy(cub->map[i], line, ft_strlen(line));
 	close(fd);
 	return (cub->map);
 }
@@ -497,6 +498,8 @@ int		is_valid_vertical(t_cub *cub)
 
 int		is_valid_map(t_cub *cub)
 {
+	// if (!(is_valid_horizontal(cub)))
+	// 	return (0);
 	if (!(is_valid_vertical(cub)) || !(is_valid_horizontal(cub)))
 		return (0);
 	return (1);
@@ -534,7 +537,10 @@ int		parse_scene(char *filepath, t_cub *cub)
 		else if (is_floor_ceiling(line) && !(check_color(line, cub, &check)))
 			return (0);
 		if (check == 0b11111111 && !(check_map(fd, cub, filepath)))
+		{
+			print_cub(cub);
 			return (0);
+		}
 	}
 	close(fd);
 	print_cub(cub);
