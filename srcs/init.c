@@ -13,133 +13,49 @@ void	init_window(t_window *window, int width, int height, char *title)
 		(int *)mlx_get_data_addr(window->img_ptr, &tp, &tp, &tp);
 }
 
-void	init_map(t_window *window, t_map *map, t_cub *cub)
+void	init_map(t_map *map, t_cub *cub)
 {
-	if (!window)
-		return ;
 	map->map = cub->map;
 	map->color = 0xFFFFFF;
 	map->width = (double)cub->map_w;
 	map->height = (double)cub->map_h;
 }
 
-int		init_sprite(t_map *map, t_scene *scene)
-{
-	int		i;
-	int		j;
-	int		cnt;
-
-	cnt = 0;
-	i = -1;
-	while (++i < map->height)
-	{
-		j = 0;
-		while (j < map->width)
-		{
-			if (map->map[i][j] == '2')
-				cnt++;
-			j++;
-		}
-	}
-	scene->n_sprite = cnt;
-	if (!(scene->z_buffer = malloc(sizeof(double) * scene->window.width)))
-		return (0);
-	if (!(scene->sprite = malloc(sizeof(t_scene) * cnt)))
-		return (0);
-	i = -1;
-	cnt = 0;
-	while (++i < map->height)
-	{
-		j = 0;
-		while (j < map->width)
-		{
-			if (map->map[i][j] == '2')
-			{
-				scene->sprite[cnt].d = 1;
-				scene->sprite[cnt].y = (double)i + 0.5;
-				scene->sprite[cnt].x = (double)j + 0.5;
-				scene->sprite[cnt].type = map->map[i][j];
-				cnt++;
-			}
-			j++;
-		}
-	}
-	return (1);
-}
-
-void	init_texture(t_window *window, t_texture *txr, t_cub *cub)
+void	init_texture(void *mlx_ptr, t_texture *t, t_cub *cub)
 {
 	int		tp;
 
-	txr->n = mlx_png_file_to_image(window->mlx_ptr, cub->tex_n, &tp, &tp);
-	txr->s = mlx_png_file_to_image(window->mlx_ptr, cub->tex_s, &tp, &tp);
-	txr->w = mlx_png_file_to_image(window->mlx_ptr, cub->tex_w, &tp, &tp);
-	txr->e = mlx_png_file_to_image(window->mlx_ptr, cub->tex_e, &tp, &tp);
-	txr->i = mlx_png_file_to_image(window->mlx_ptr, cub->tex_i, &tp, &tp);
-	txr->f = mlx_png_file_to_image(window->mlx_ptr, "./textures/floor.png", &tp, &tp);
-	txr->c = mlx_png_file_to_image(window->mlx_ptr, "./textures/ceiling.png", &tp, &tp);
-
-	txr->n_data = (int(*)[TEXTURE_SIZE])mlx_get_data_addr(txr->n, \
-														&tp, &tp, &tp);
-	txr->s_data = (int(*)[TEXTURE_SIZE])mlx_get_data_addr(txr->s, \
-														&tp, &tp, &tp);
-	txr->w_data = (int(*)[TEXTURE_SIZE])mlx_get_data_addr(txr->w, \
-														&tp, &tp, &tp);
-	txr->e_data = (int(*)[TEXTURE_SIZE])mlx_get_data_addr(txr->e, \
-														&tp, &tp, &tp);
-	txr->i_data = (int(*)[SPRITE_W])mlx_get_data_addr(txr->i, \
-														&tp, &tp, &tp);
-	txr->f_data = (int(*)[TEXTURE_SIZE])mlx_get_data_addr(txr->f, \
-														&tp, &tp, &tp);
-	txr->c_data = (int(*)[TEXTURE_SIZE])mlx_get_data_addr(txr->c, \
-														&tp, &tp, &tp);
+	t->n = mlx_png_file_to_image(mlx_ptr, cub->tex_n, &tp, &tp);
+	t->s = mlx_png_file_to_image(mlx_ptr, cub->tex_s, &tp, &tp);
+	t->w = mlx_png_file_to_image(mlx_ptr, cub->tex_w, &tp, &tp);
+	t->e = mlx_png_file_to_image(mlx_ptr, cub->tex_e, &tp, &tp);
+	t->i = mlx_png_file_to_image(mlx_ptr, cub->tex_i, &tp, &tp);
+	t->f = mlx_png_file_to_image(mlx_ptr, "./textures/floor.png", &tp, &tp);
+	t->c = mlx_png_file_to_image(mlx_ptr, "./textures/ceiling.png", &tp, &tp);
+	t->n_data = (int(*)[TEXTURE_SIZE])mlx_get_data_addr(t->n, &tp, &tp, &tp);
+	t->s_data = (int(*)[TEXTURE_SIZE])mlx_get_data_addr(t->s, &tp, &tp, &tp);
+	t->w_data = (int(*)[TEXTURE_SIZE])mlx_get_data_addr(t->w, &tp, &tp, &tp);
+	t->e_data = (int(*)[TEXTURE_SIZE])mlx_get_data_addr(t->e, &tp, &tp, &tp);
+	t->i_data = (int(*)[SPRITE_W])mlx_get_data_addr(t->i, &tp, &tp, &tp);
+	t->f_data = (int(*)[TEXTURE_SIZE])mlx_get_data_addr(t->f, &tp, &tp, &tp);
+	t->c_data = (int(*)[TEXTURE_SIZE])mlx_get_data_addr(t->c, &tp, &tp, &tp);
 }
 
-void	init_ray(t_ray *ray, double rad)
+int		init_player(t_player *player, t_cub *cub)
 {
-	ray->color = 0xFFFFFF;
-	ray->rad = rad;
-	ray->hit = 0;
-	ray->hit_type = '0';
-}
-
-int		init_player(t_player *player, t_cub *cub, t_map *map)
-{
-	int		i;
-
-	i = 0;
-	if(!map)
-		return (0);
-	cub->player_x = cub->player_x;
-	cub->player_y = cub->player_y;
 	player->pos_x = (double)cub->player_x + 0.5;
 	player->pos_y = (double)cub->player_y + 0.5;
 	player->rad = cub->player_dir;
 	player->move_speed = 0.1;
 	player->rot_speed = 0.08;
-	player->plane_x = 0.0; //
-	player->plane_y = 0.66; //
-	double	old_plane_x, plane_x, plane_y;
-	double	rad;
-	player->rad = player->rad;
-	player->dir_x = cos(player->rad * PI / 180); // -1
-	if (player->dir_x > -0.001 && player->dir_x < 0.001)
-		player->dir_x = 0;
-	player->dir_y = sin(player->rad * PI / 180); // 0
-	rad = player->rad;
-	plane_x = player->plane_x;
-	plane_y = player->plane_y;
-	old_plane_x = plane_x;
-	player->plane_x = plane_x * cos(rad * PI / 180) - plane_y * sin(rad * PI / 180);
-	player->plane_y = old_plane_x * sin(rad * PI / 180) + plane_y * cos(rad * PI / 180);
+	player->plane_x = 0.0;
+	player->plane_y = 0.66;
+	player->dir_x = 1.0;
+	player->dir_y = 0.0;
+	rotate_player(player, (player->rad * PI / 180));
+	rotate_plane(player, (player->rad * PI / 180));
 	if (!(player->rays = malloc(sizeof(t_ray) * cub->res_w)))
 		return (0);
-	while (i < cub->res_w)
-	{
-		init_ray(&(player->rays[i]),
-					player->rad + ((60.0 / (double)(cub->res_w - 1)) * (double)i) - 30.0);
-		i++;
-	}
 	return (1);
 }
 
@@ -154,11 +70,11 @@ int		load_scene(char *scene_path, t_scene *scene, t_cub *cub)
 	scene->f_color = cub->color_f;
 	scene->c_color = cub->color_c;
 	init_window(&(scene->window), cub->res_w, cub->res_h, "cub3d");
-	init_map(&(scene->window), &(scene->map), cub);
-	init_texture(&(scene->window), &(scene->texture), cub);
+	init_map(&(scene->map), cub);
+	init_texture(scene->window.mlx_ptr, &(scene->texture), cub);
 	if (!(init_sprite(&(scene->map), scene)))
 		return (0);
-	if (!(init_player(&(scene->player), cub, &(scene->map))))
+	if (!(init_player(&(scene->player), cub)))
 		return (0);
 	return (1);
 }

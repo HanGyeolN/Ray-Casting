@@ -159,7 +159,6 @@ int		ray_casting(t_map *map, t_scene *scene)
 			if (map->map[map_y][map_x] == '1')
 			{
 				hit = 1;
-				scene->player.rays[x].hit_type = '1';
 			}
 		}
 

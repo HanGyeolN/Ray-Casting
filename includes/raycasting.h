@@ -68,7 +68,6 @@ typedef struct		s_ray
 	double	delta_dist_x;
 	double	delta_dist_y;
 	double	perp_wall_dist;
-	double	rad;
 	double	dist;
 	double	wall_x;
 	int		line_h;
@@ -77,8 +76,6 @@ typedef struct		s_ray
 	int		color;
 	int		side;
 	int		cardinal;
-	int		hit;
-	char	hit_type;
 }					t_ray;
 
 typedef struct		s_player
@@ -214,18 +211,23 @@ int		ray_casting(t_map *map, t_scene *scene);
 void	render(t_scene *scene);
 char	**make_map(int fd, t_cub *cub, char *filename);
 int		parse_scene(char *filepath, t_cub *cub);
-int		press_key(int key, t_scene *scene);
-int		release_key(int key, t_scene *scene);
-int		load_scene(char *scene_path, t_scene *scene, t_cub *cub);
+
+
 int		screen_shot(int height, int width, int *img_data);
 int		error(char *error_msg);
-int		close_game(t_scene *scene);
 
+int		press_key(int key, t_scene *scene);
+int		close_game(t_scene *scene);
 void	move_front(t_map *map, t_player *p);
 void	move_back(t_map *map, t_player *p);
 void	move_right(t_map *map, t_player *p);
 void	move_left(t_map *map, t_player *p);
 void	rotate_right(t_player *p);
 void	rotate_left(t_player *p);
+void	rotate_player(t_player *p, double spd);
+void	rotate_plane(t_player *p, double spd);
+
+int		init_sprite(t_map *map, t_scene *scene);
+int		load_scene(char *scene_path, t_scene *scene, t_cub *cub);
 
 #endif
