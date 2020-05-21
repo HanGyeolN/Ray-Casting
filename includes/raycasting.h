@@ -207,14 +207,46 @@ typedef struct	s_bitmap
 int		sprite_order[100];
 double	sprite_distance[100];
 
-int		ray_casting(t_map *map, t_scene *scene);
-void	render(t_scene *scene);
-char	**make_map(int fd, t_cub *cub, char *filename);
+/*
+** Initialize
+*/
+
+int		init_sprite(t_map *map, t_scene *scene);
+int		init_player(t_player *player, t_cub *cub);
+void	init_texture(void *mlx_ptr, t_texture *t, t_cub *cub);
+void	init_map(t_map *map, t_cub *cub);
+void	init_window(t_window *window, int width, int height, char *title);
+
+/*
+** Parsing
+*/
+
+int		is_resolution(char *line);
+int		is_texture(char *line);
+int		is_floor_ceiling(char *line);
+int		load_scene(char *scene_path, t_scene *scene, t_cub *cub);
+int		convert_map(t_cub *cub);
+int		set_player(t_cub *cub);
+char	**parse_map(int fd, t_cub *cub, char *filename);
 int		parse_scene(char *filepath, t_cub *cub);
+int		parse_color(char *line, t_cub *cub, int *check);
+int		parse_resolution(char *line, t_cub *cub, int *check);
+int		parse_path(char *line, t_cub *cub, int *check);
 
+/*
+** Validation Check
+*/
 
-int		screen_shot(int height, int width, int *img_data);
-int		error(char *error_msg);
+int		is_valid_map(t_cub *cub);
+int		is_valid_color(char **colors);
+int		check_color(char *line, t_cub *cub, int *check);
+int		check_texture(char *line, t_cub *cub, int *check);
+int		check_map(int fd, t_cub *cub, char *filepath);
+int		check_resolution(char *line, t_cub *cub, int *check);
+
+/*
+** Event
+*/
 
 int		press_key(int key, t_scene *scene);
 int		close_game(t_scene *scene);
@@ -227,7 +259,10 @@ void	rotate_left(t_player *p);
 void	rotate_player(t_player *p, double spd);
 void	rotate_plane(t_player *p, double spd);
 
-int		init_sprite(t_map *map, t_scene *scene);
-int		load_scene(char *scene_path, t_scene *scene, t_cub *cub);
+
+int		screen_shot(int height, int width, int *img_data);
+int		error(char *error_msg);
+int		ray_casting(t_map *map, t_scene *scene);
+void	render(t_scene *scene);
 
 #endif

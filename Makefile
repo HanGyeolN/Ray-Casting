@@ -1,9 +1,11 @@
 CC = gcc
 NAME = cub3D
 CFLAGS = -Wall -Werror -Wextra
-SRC = main.c		render.c		init.c		close_game.c\
-	  parse_scene.c	ray.c			event.c		screen_shot.c\
-	  player_move.c	player_rotate.c	init_sprite.c\
+SRC = main.c			render.c			init.c			close_game.c	\
+	  parse_scene.c		ray.c				event.c			screen_shot.c	\
+	  player_move.c		player_rotate.c		init_sprite.c					\
+	  parse_map.c		parse_resolution.c	load_scene.c					\
+	  valid_check.c		valid_check2.c		parse_utils.c
 	  
 
 SRC_DIR = srcs

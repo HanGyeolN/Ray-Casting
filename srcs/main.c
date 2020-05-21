@@ -40,4 +40,5 @@ int		main(int argc, char **argv)
 	mlx_hook((scene.window).win_ptr, 2, 0, press_key, &scene);
 	mlx_hook((scene.window).win_ptr, 17, 0, close_game, &scene);
 	mlx_loop((scene.window).mlx_ptr);
+	return (0);
 }
