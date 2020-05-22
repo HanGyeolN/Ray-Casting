@@ -5,7 +5,8 @@ SRC = main.c			render.c			init.c			close_game.c	\
 	  parse_scene.c		raycast.c			event.c			screen_shot.c	\
 	  player_move.c		player_rotate.c		init_sprite.c					\
 	  parse_map.c		parse_resolution.c	load_scene.c					\
-	  valid_check.c		valid_check2.c		parse_utils.c	parse_color.c
+	  valid_check.c		valid_check2.c		parse_utils.c	parse_color.c	\
+	  cast_floor.c		cast_wall.c			cast_sprite.c					\
 	  
 
 SRC_DIR = srcs

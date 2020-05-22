@@ -70,6 +70,8 @@ typedef struct		s_ray
 	double	perp_wall_dist;
 	double	dist;
 	double	wall_x;
+	int		step_x;
+	int		step_y;
 	int		line_h;
 	int		draw_s;
 	int		draw_e;
@@ -266,10 +268,17 @@ void	rotate_left(t_player *p);
 void	rotate_player(t_player *p, double spd);
 void	rotate_plane(t_player *p, double spd);
 
+/*
+** Raycasting
+*/
+
+void	wall_casting(t_scene *scene);
+void	floor_casting(t_scene *scene);
+void	sprite_casting(t_scene *scene);
+int		ray_casting(t_scene *scene);
 
 int		screen_shot(int height, int width, int *img_data);
 int		error(char *error_msg);
-int		ray_casting(t_scene *scene);
 void	render(t_scene *scene);
 
 #endif
