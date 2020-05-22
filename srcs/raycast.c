@@ -27,28 +27,21 @@ void	sort_sprites(int *order, double *dist, int amount)
 	}
 }
 
-int		ray_casting(t_map *map, t_scene *scene)
+void	floor_casting(t_scene *scene)
 {
-	int		x, y;
-	int		map_x;
-	int		map_y;
-	double	camera_x;
-	int		step_x;
-	int		step_y;
-	int		hit;
-	int		color;
-
-	x = -1;
-	y = -1;
-	// floor casting
 	float	ray_dir_x0, ray_dir_x1, ray_dir_y0, ray_dir_y1;
 	int		p;
+	int		color;
+	int		x;
+	int		y;
 	float	pos_z;
 	float	row_dist;
 	float	f_stepx, f_stepy;
 	float	floor_x, floor_y;
 	int cell_x, cell_y;
 	int	tx, ty;
+
+	y = -1;
 	while (++y < scene->window.height)
 	{
 		ray_dir_x0 = (scene->player.dir_x + scene->player.plane_x); // -1 0
@@ -90,23 +83,27 @@ int		ray_casting(t_map *map, t_scene *scene)
 			ty = (int)(TEXTURE_H * (floor_y - cell_y));
 			if (ty < 0 || ty > 50)
 				ty = 0;
-			//printf("%d %d\n", ty, tx);
 			floor_x += f_stepx;
 			floor_y += f_stepy;
-			//printf("%d, %d\n", ty, tx);
 			color = scene->texture.f_data[ty][tx];
-			//printf("texture[%d][%d]\n", ty, tx);
-			//printf("%x\n", color);
-			//color = (color >> 1) & 8355711;
 			scene->window.img_data[(int)(scene->window.width * y + ((int)scene->window.width - x - 1))] = color;
-
 			color = scene->texture.c_data[ty][tx];
 			scene->window.img_data[(int)(scene->window.width * ((int)scene->window.height - y - 1) + ((int)scene->window.width - x - 1))] = color;
 		}
 	}
-	
+}
 
-	// wall casting
+void	wall_casting(t_scene *scene, t_map *map)
+{
+	int		x, y;
+	int		map_x;
+	int		map_y;
+	double	camera_x;
+	int		step_x;
+	int		step_y;
+	int		hit;
+	int		color;
+
 	x = -1;
 	y = -1;
 	while (++x < scene->window.width)
@@ -233,12 +230,25 @@ int		ray_casting(t_map *map, t_scene *scene)
 		// sprite casting
 		scene->z_buffer[x] = scene->player.rays[x].perp_wall_dist;
 	}
+}
+
+int		ray_casting(t_scene *scene)
+{
+	int		x, y;
+	int		color;
+
+	x = -1;
+	y = -1;
+
+	floor_casting(scene);
+	
+	wall_casting(scene, &(scene->map));
+
 
 	// sprite casting
 	int		i;
 	int		n_sprite;
 
-	//printf("n: %d, (%f, %f)\n", scene->n_sprite, scene->sprite[0].x, scene->sprite[0].y);
 	n_sprite = scene->n_sprite;
 	i = 0;
 	while (i < n_sprite)

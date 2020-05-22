@@ -1,5 +1,36 @@
 #include "raycasting.h"
 
+/*
+** Calculate number of splited word 
+*/
+
+int		split_len(char **splits)
+{
+	int		len;
+
+	len = 0;
+	while (splits[len])
+		len++;
+	return (len);
+}
+
+/*
+** free after ft_split function
+*/
+
+void	free_splits(char **splits)
+{
+	int		i;
+
+	i = 0;
+	while (splits[i])
+	{
+		free(splits[i]);
+		i++;
+	}
+	free(splits);
+}
+
 int		is_resolution(char *line)
 {
 	if (ft_strncmp(line, "R ", 2) == 0)

@@ -7,14 +7,12 @@ void	free_map(char **map, int map_h)
 	free(map);
 }
 
-char	**malloc_map(char **map, int fd, t_cub *cub)
+void	set_map_size(t_cub *cub, int fd)
 {
 	char	*line;
-	int		map_w;
-	int		map_h;
 
-	map_w = 0;
-	map_h = 0;
+	cub->map_w = 0;
+	cub->map_h = 0;
 	while (get_next_line(fd, &line))
 	{
 		if (ft_strlen(line) == 0)
@@ -22,13 +20,21 @@ char	**malloc_map(char **map, int fd, t_cub *cub)
 			cub->line_n += 1;
 			continue;
 		}
-		if (ft_strlen(line) > map_w)
-			map_w = ft_strlen(line);
-		map_h++;
+		if (ft_strlen(line) > cub->map_w)
+			cub->map_w = ft_strlen(line);
+		(cub->map_h)++;
 	}
-	map_h++;
-	cub->map_w = map_w;
-	cub->map_h = map_h;
+	(cub->map_h)++;
+}
+
+char	**malloc_map(char **map, int fd, t_cub *cub)
+{
+	int		map_w;
+	int		map_h;
+
+	set_map_size(cub, fd);
+	map_w = cub->map_w;
+	map_h = cub->map_h;
 	if (!(map = malloc(sizeof(char *) * (map_h + 1))))
 		return (0);
 	map[map_h] = 0;

@@ -218,12 +218,19 @@ void	init_map(t_map *map, t_cub *cub);
 void	init_window(t_window *window, int width, int height, char *title);
 
 /*
-** Parsing
+** Parsing Utils
 */
 
 int		is_resolution(char *line);
 int		is_texture(char *line);
 int		is_floor_ceiling(char *line);
+void	free_splits(char **splits);
+int		split_len(char **splits);
+
+/*
+** Parsing
+*/
+
 int		load_scene(char *scene_path, t_scene *scene, t_cub *cub);
 int		convert_map(t_cub *cub);
 int		set_player(t_cub *cub);
@@ -262,7 +269,7 @@ void	rotate_plane(t_player *p, double spd);
 
 int		screen_shot(int height, int width, int *img_data);
 int		error(char *error_msg);
-int		ray_casting(t_map *map, t_scene *scene);
+int		ray_casting(t_scene *scene);
 void	render(t_scene *scene);
 
 #endif

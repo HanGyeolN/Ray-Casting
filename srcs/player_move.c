@@ -16,9 +16,9 @@ void	move_back(t_map *map, t_player *p)
 	double	speed;
 
 	speed = p->move_speed;
-	if (map->map[(int)p->pos_y][(int)(p->pos_x + p->dir_x * speed)] != '1')
+	if (map->map[(int)p->pos_y][(int)(p->pos_x - p->dir_x * speed)] != '1')
 		p->pos_x -= p->dir_x * speed;
-	if (map->map[(int)(p->pos_y + p->dir_y * speed)][(int)p->pos_x] != '1')
+	if (map->map[(int)(p->pos_y - p->dir_y * speed)][(int)p->pos_x] != '1')
 		p->pos_y -= p->dir_y * speed;
 }
 

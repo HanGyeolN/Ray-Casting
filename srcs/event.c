@@ -17,7 +17,7 @@ int		press_key(int key, t_scene *scene)
 		rotate_right(&scene->player);
 	else if (key == KEY_LEFT)
 		rotate_left(&scene->player);
-	ray_casting(&(scene->map), scene);
+	ray_casting(scene);
 	render(scene);
 	return (0);
 }

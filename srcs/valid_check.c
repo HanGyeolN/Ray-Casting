@@ -41,6 +41,25 @@ int		check_map(int fd, t_cub *cub, char *filepath)
 	convert_map(cub);
 	if (!(is_valid_map(cub)))
 		return (error("Not a valid map"));
-	set_player(cub);
+	if (!(set_player(cub)))
+		return (error("player position error"));
+	return (1);
+}
+
+int		is_valid_color(char **colors)
+{
+	int		idx;
+	int		i;
+	idx = 0;
+	i = -1;
+	while (idx < 3)
+	{
+		while (++i < ft_strlen(colors[idx]))
+			if (is_numeric(colors[idx][i]) == 0)
+				return (0);
+		if (ft_atoi(colors[idx]) < 0 || ft_atoi(colors[idx]) > 255)
+			return (0);
+		idx++;
+	}
 	return (1);
 }
