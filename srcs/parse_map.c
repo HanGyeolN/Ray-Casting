@@ -23,7 +23,9 @@ void	set_map_size(t_cub *cub, int fd)
 		if (ft_strlen(line) > cub->map_w)
 			cub->map_w = ft_strlen(line);
 		(cub->map_h)++;
+		free(line);
 	}
+	free(line);
 	(cub->map_h)++;
 }
 
@@ -65,14 +67,19 @@ char	**parse_map(int fd, t_cub *cub, char *filename)
 	i = -1;
 	fd = open(filename, O_RDONLY);
 	while (++i < cub->line_n)
+	{
 		get_next_line(fd, &line);
+		free(line);
+	}
 	i = 0;
 	while (get_next_line(fd, &line))
 	{
 		ft_strncpy(cub->map[i], line, ft_strlen(line));
+		free(line);
 		i++;
 	}
 	ft_strncpy(cub->map[i], line, ft_strlen(line));
+	free(line);
 	close(fd);
 	return (cub->map);
 }

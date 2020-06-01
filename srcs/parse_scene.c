@@ -1,34 +1,6 @@
 #include "raycasting.h"
 #include "libftprintf.h"
 
-void	print_cub(t_cub *cub)
-{
-	int		i;
-
-	i = 0;
-	ft_printf("Resolution Width: %d\n", cub->res_w);
-	ft_printf("Resolution Height: %d\n", cub->res_h);
-	ft_printf("Texture North: %s\n", cub->tex_n);
-	ft_printf("Texture South: %s\n", cub->tex_s);
-	ft_printf("Texture West: %s\n", cub->tex_w);
-	ft_printf("Texture East: %s\n", cub->tex_e);
-	ft_printf("Texture Item: %s\n", cub->tex_i);
-	ft_printf("Floor Color: %x\n", cub->color_f);
-	ft_printf("Ceiling Color: %x\n", cub->color_c);
-	ft_printf("Map Width: %d\n", cub->map_w);
-	ft_printf("Map Height: %d\n", cub->map_h);
-	ft_printf("============map============\n");
-	while (i < cub->map_h)
-	{
-		ft_printf("%s\n", (cub->map)[i]);
-		i++;
-	}
-	ft_printf("===========================\n");
-	ft_printf("Player Position X: %d\n", cub->player_x);
-	ft_printf("Player Position Y: %d\n", cub->player_y);
-	ft_printf("Player Direction: %d\n", (int)cub->player_dir);
-}
-
 /*
 ** check keyword from .cub file
 ** texture keyword : NO, SO, WE, EA, S
@@ -134,8 +106,9 @@ int		parse_scene(char *filepath, t_cub *cub)
 			return (0);
 		if (check == 0b11111111 && !(check_map(fd, cub, filepath)))
 			return (0);
+		free(line);
 	}
+	free(line);
 	close(fd);
-	print_cub(cub);
 	return (1);
 }

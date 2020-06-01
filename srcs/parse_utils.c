@@ -28,6 +28,7 @@ void	free_splits(char **splits)
 		free(splits[i]);
 		i++;
 	}
+	free(splits[i]);
 	free(splits);
 }
 

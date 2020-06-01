@@ -46,7 +46,6 @@
 # define MAX_SC_H 1080
 # define MIN_SC_H 280
 
-
 typedef struct		s_window
 {
 	double	width;
@@ -56,6 +55,15 @@ typedef struct		s_window
 	void	*img_ptr;
 	int		*img_data;
 }					t_window;
+
+typedef struct		s_floor
+{
+	float	row_dist;
+	float	f_stepx;
+	float	f_stepy;
+	float	floor_x;
+	float	floor_y;
+}					t_floor;
 
 typedef struct		s_ray
 {
@@ -98,8 +106,6 @@ typedef struct		s_map
 {
 	double	width;
 	double	height;
-	int		width_r;
-	int		height_r;
 	int		block_w;
 	int		block_h;
 	int		color;
@@ -133,6 +139,28 @@ typedef struct		s_sprite
 	int		d;
 	char	type;
 }					t_sprite;
+
+typedef struct		s_spritev
+{
+	int		scale_w;
+	int		scale_h;
+	int		color;
+	double	sprite_x;
+	double	sprite_y;
+	double	inv_det;
+	double	trans_x;
+	double	trans_y;
+	int		sprite_screen_x;
+	int		sprite_height;
+	int		draw_start_y;
+	int		draw_end_y;
+	int		sprite_width;
+	int		draw_start_x;
+	int		draw_end_x;
+	int		stripe;
+	int		tex_x;
+	int		tex_y;
+}					t_spritev;
 
 typedef struct		s_scene
 {
@@ -197,17 +225,6 @@ typedef struct	s_bitmap_info_header
 	int		bi_clr_used;
 	int		bi_clr_important;
 }				t_bitmap_info_header;
-
-typedef struct	s_bitmap
-{
-	t_bitmap_file_header	file_header;
-	t_bitmap_info_header	info_header;
-	unsigned char			*image;
-}				t_bitmap;
-
-
-int		sprite_order[100];
-double	sprite_distance[100];
 
 /*
 ** Initialize
@@ -276,6 +293,13 @@ void	wall_casting(t_scene *scene);
 void	floor_casting(t_scene *scene);
 void	sprite_casting(t_scene *scene);
 int		ray_casting(t_scene *scene);
+
+/*
+** Sprite Utils
+*/
+
+int		*get_sprite_order(t_scene *scene);
+void	sort_sprites(int *order, double *dist, int amount);
 
 int		screen_shot(int height, int width, int *img_data);
 int		error(char *error_msg);
