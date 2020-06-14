@@ -235,6 +235,7 @@ int		init_player(t_player *player, t_cub *cub);
 void	init_texture(void *mlx_ptr, t_texture *t, t_cub *cub);
 void	init_map(t_map *map, t_cub *cub);
 void	init_window(t_window *window, int width, int height, char *title);
+void	init_mlx_window(t_scene *scene, t_cub *cub, char *title);
 
 /*
 ** Parsing Utils
@@ -250,7 +251,7 @@ int		split_len(char **splits);
 ** Parsing
 */
 
-int		load_scene(char *scene_path, t_scene *scene, t_cub *cub);
+int		load_scene(char *scene_path, t_scene *scene);
 int		convert_map(t_cub *cub);
 int		set_player(t_cub *cub);
 char	**parse_map(int fd, t_cub *cub, char *filename);

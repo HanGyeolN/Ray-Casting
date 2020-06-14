@@ -23,10 +23,10 @@ int		parse_color(char *line, t_cub *cub, int *check)
 
 	splits = ft_split(line, ' ');
 	if (split_len(splits) != 2)
-		return (0);
+		return (error("color parsing error | split length is not 2."));
 	colors = ft_split(splits[1], ',');
 	if (split_len(colors) != 3 || !(is_valid_color(colors)))
-		return (0);
+		return (error("color parsing error"));
 	color = get_color(colors);
 	if (splits[0][0] == 'F')
 	{

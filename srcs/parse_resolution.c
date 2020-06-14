@@ -14,7 +14,7 @@ int		parse_resolution(char *line, t_cub *cub, int *check)
 
 	splits = ft_split(line, ' ');
 	if (split_len(splits) != 3)
-		return (0);
+		return (error("resolution parsing error | split length is not 3"));
 	idx = 1;
 	while (idx < 3)
 	{
@@ -22,7 +22,7 @@ int		parse_resolution(char *line, t_cub *cub, int *check)
 		len = ft_strlen(splits[idx]);
 		while (++i < len)
 			if (is_numeric(splits[idx][i]) == 0)
-				return (0);
+				return (error("resolution parsing error | not a number"));
 		if (idx == 1)
 			cub->res_w = ft_atoi(splits[idx]);
 		else
@@ -42,7 +42,7 @@ int		parse_path(char *line, t_cub *cub, int *check)
 	if (split_len(spts) != 2)
 	{
 		free_splits(spts);
-		return (0);
+		return (error("texture path parsing error | split len is not 2"));
 	}
 	if (ft_strcmp(spts[0], "NO") == 0 && ft_strcpy(cub->tex_n, spts[1]))
 		*check += 0b01000000;

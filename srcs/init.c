@@ -1,5 +1,24 @@
 #include "raycasting.h"
 
+void	init_mlx_window(t_scene *scene, t_cub *cub, char *title)
+{
+	t_window	*wd;
+	int			width;
+	int			height;
+	int			tp;
+
+	width = cub->res_w;
+	height = cub->res_h;
+	wd = &(scene->window);
+	wd->mlx_ptr = mlx_init();
+	wd->win_ptr = mlx_new_window(wd->mlx_ptr, width, height, title);
+	wd->width = (double)width;
+	wd->height = (double)height;
+	wd->img_ptr = mlx_new_image(wd->mlx_ptr, width, height);
+	wd->img_data = (int *)mlx_get_data_addr(wd->img_ptr, &tp, &tp, &tp);
+}
+
+
 void	init_window(t_window *window, int width, int height, char *title)
 {
 	int		tp;
@@ -55,6 +74,6 @@ int		init_player(t_player *player, t_cub *cub)
 	rotate_player(player, (player->rad * PI / 180));
 	rotate_plane(player, (player->rad * PI / 180));
 	if (!(player->rays = malloc(sizeof(t_ray) * cub->res_w)))
-		return (0);
+		return (error("malloc failed | init_player"));
 	return (1);
 }

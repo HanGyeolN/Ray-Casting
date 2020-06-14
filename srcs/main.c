@@ -23,12 +23,11 @@ int		error(char *error_msg)
 int		main(int argc, char **argv)
 {
 	t_scene		scene;
-	t_cub		cub;
 
 	if (argc != 2 && argc != 3)
 		return (error("Usage: ./cub3D <.cub filepath>"));
-	if (!(load_scene(argv[1], &scene, &cub)))
-		return (error(".cub misconfiguration"));
+	if (!(load_scene(argv[1], &scene)))
+		return (0);
 	ray_casting(&scene);
 	if (argc == 3 && ft_strcmp(argv[2], "--save") == 0)
 	{
