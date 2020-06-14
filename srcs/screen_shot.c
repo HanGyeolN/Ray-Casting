@@ -78,7 +78,7 @@ void			generate_bitmap_image(unsigned char *image, int height, int width)
 	close(fd);
 }
 
-int				screen_shot(int height, int width, int *img_data)
+int				image_to_bmp(int height, int width, int *img_data)
 {
 	int				i;
 	int				j;

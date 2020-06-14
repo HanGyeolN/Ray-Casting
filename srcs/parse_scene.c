@@ -93,8 +93,8 @@ int		parse_scene(char *filepath, t_cub *cub)
 	check = 0b00000000;
 	cub->line_n = 0;
 	fd = open(filepath, O_RDONLY);
-	if (fd < 0)
-		perror("[scene open]");
+	if (fd <= 0)
+		return(error("file open error"));
 	while (get_next_line(fd, &line) > 0)
 	{
 		cub->line_n += 1;
@@ -110,5 +110,7 @@ int		parse_scene(char *filepath, t_cub *cub)
 	}
 	free(line);
 	close(fd);
+	if (check != 0b11111111)
+		return (error("cub file error"));
 	return (1);
 }

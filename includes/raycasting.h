@@ -232,9 +232,8 @@ typedef struct	s_bitmap_info_header
 
 int		init_sprite(t_map *map, t_scene *scene);
 int		init_player(t_player *player, t_cub *cub);
-void	init_texture(void *mlx_ptr, t_texture *t, t_cub *cub);
+int		init_texture(void *mlx_ptr, t_texture *tex, t_cub *cub);
 void	init_map(t_map *map, t_cub *cub);
-void	init_window(t_window *window, int width, int height, char *title);
 void	init_mlx_window(t_scene *scene, t_cub *cub, char *title);
 
 /*
@@ -302,7 +301,7 @@ int		ray_casting(t_scene *scene);
 int		*get_sprite_order(t_scene *scene);
 void	sort_sprites(int *order, double *dist, int amount);
 
-int		screen_shot(int height, int width, int *img_data);
+int		image_to_bmp(int height, int width, int *img_data);
 int		error(char *error_msg);
 void	render(t_scene *scene);
 

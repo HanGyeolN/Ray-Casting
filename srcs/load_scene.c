@@ -30,7 +30,8 @@ int		init_scene(t_scene *scene, t_cub *cub)
 	init_floor_ceiling_color(scene, cub);
 	init_mlx_window(scene, cub, "cub3d");
 	init_map(&(scene->map), cub);
-	init_texture(scene->window.mlx_ptr, &(scene->texture), cub);
+	if (!(init_texture(scene->window.mlx_ptr, &(scene->texture), cub)))
+		return (0);
 	if (!(init_sprite(&(scene->map), scene)))
 		return (0);
 	if (!(init_player(&(scene->player), cub)))

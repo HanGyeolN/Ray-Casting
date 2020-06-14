@@ -13,7 +13,5 @@ int		close_game(t_scene *scene)
 	free(scene->map.map);
 	mlx_destroy_image(scene->window.mlx_ptr, scene->window.img_ptr);
 	mlx_destroy_window(scene->window.mlx_ptr, scene->window.win_ptr);
-	while (1)
-		i += 1;
 	exit (0);
 }

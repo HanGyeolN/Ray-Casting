@@ -20,18 +20,32 @@ int		error(char *error_msg)
 	return (0);
 }
 
+int		screenshot(t_scene *scene)
+{
+	int		width;
+	int		height;
+	int		*image;
+
+	width = scene->window.width;
+	height = scene->window.height;
+	image = scene->window.img_data;
+	if (!(image_to_bmp(height, width, image)))
+		return (0);
+	return (1);
+}
+
 int		main(int argc, char **argv)
 {
 	t_scene		scene;
 
 	if (argc != 2 && argc != 3)
-		return (error("Usage: ./cub3D <.cub filepath>"));
+		return (error("Usage: ./cub3D <.cub filepath> <-options>"));
 	if (!(load_scene(argv[1], &scene)))
 		return (0);
 	ray_casting(&scene);
 	if (argc == 3 && ft_strcmp(argv[2], "--save") == 0)
 	{
-		screen_shot(scene.window.height, scene.window.width, scene.window.img_data);
+		screenshot(&scene);
 		close_game(&scene);
 		return (0);
 	}
