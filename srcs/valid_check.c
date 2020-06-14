@@ -31,7 +31,7 @@ int		check_map(int fd, t_cub *cub, char *filepath)
 		return (error("parse_map error"));
 	convert_map(cub);
 	if (!(is_valid_map(cub)))
-		return (error("Not a valid map"));
+		return (0);
 	if (!(set_player(cub)))
 		return (error("player position error"));
 	return (1);

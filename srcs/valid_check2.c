@@ -82,9 +82,44 @@ int		is_valid_vertical(t_cub *cub)
 	return (1);
 }
 
+int		is_valid_character(char c)
+{
+	if (c == '1' || c == '0' || c == ' ' || c == '\n')
+		return (1);
+	if (c == 'N' || c == 'S' || c == 'W' || c == 'E' || c == '2')
+		return (1);
+	return (0);
+}
+
+int		is_valid_characters(t_cub *cub)
+{
+	int		r;
+	int		c;
+
+	c = -1;
+	while (++c < cub->map_w)
+	{
+		r = -1;
+		while (++r < cub->map_h)
+		{
+			if (!(is_valid_character(cub->map[r][c])))
+			{
+				error("map error | not a valid character");
+				ft_printf("map (%d, %d) : %c", r, c, cub->map[r][c]);
+				return (0);
+			}
+		}
+	}
+	return (1);
+}
+
 int		is_valid_map(t_cub *cub)
 {
-	if (!(is_valid_vertical(cub)) || !(is_valid_horizontal(cub)))
+	if (!(is_valid_vertical(cub)))
+		return (error("map error | map must be closed"));
+	if (!(is_valid_horizontal(cub)))
+		return (error("map error | map must be closed"));
+	if (!(is_valid_characters(cub)))
 		return (0);
 	return (1);
 }
