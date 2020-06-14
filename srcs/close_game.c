@@ -23,5 +23,7 @@ int		close_game(t_scene *scene)
 	mlx_destroy_window(scene->window.mlx_ptr, scene->window.win_ptr);
 	mlx_clear_window(scene->window.mlx_ptr, scene->window.win_ptr);
 	free(scene->window.mlx_ptr);
+	while (1)
+		i += 1;
 	exit (0);
 }

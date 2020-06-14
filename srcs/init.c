@@ -25,13 +25,13 @@ void	init_texture(void *mlx_ptr, t_texture *t, t_cub *cub)
 {
 	int		tp;
 
-	t->n = mlx_png_file_to_image(mlx_ptr, cub->tex_n, &tp, &tp);
-	t->s = mlx_png_file_to_image(mlx_ptr, cub->tex_s, &tp, &tp);
-	t->w = mlx_png_file_to_image(mlx_ptr, cub->tex_w, &tp, &tp);
-	t->e = mlx_png_file_to_image(mlx_ptr, cub->tex_e, &tp, &tp);
-	t->i = mlx_png_file_to_image(mlx_ptr, cub->tex_i, &tp, &tp);
-	t->f = mlx_png_file_to_image(mlx_ptr, "./textures/floor.png", &tp, &tp);
-	t->c = mlx_png_file_to_image(mlx_ptr, "./textures/ceiling.png", &tp, &tp);
+	t->n = mlx_xpm_file_to_image(mlx_ptr, cub->tex_n, &tp, &tp);
+	t->s = mlx_xpm_file_to_image(mlx_ptr, cub->tex_s, &tp, &tp);
+	t->w = mlx_xpm_file_to_image(mlx_ptr, cub->tex_w, &tp, &tp);
+	t->e = mlx_xpm_file_to_image(mlx_ptr, cub->tex_e, &tp, &tp);
+	t->i = mlx_xpm_file_to_image(mlx_ptr, cub->tex_i, &tp, &tp);
+	t->f = mlx_xpm_file_to_image(mlx_ptr, "./textures/floor.xpm", &tp, &tp);
+	t->c = mlx_xpm_file_to_image(mlx_ptr, "./textures/ceiling.xpm", &tp, &tp);
 	t->n_data = (int(*)[TEXTURE_SIZE])mlx_get_data_addr(t->n, &tp, &tp, &tp);
 	t->s_data = (int(*)[TEXTURE_SIZE])mlx_get_data_addr(t->s, &tp, &tp, &tp);
 	t->w_data = (int(*)[TEXTURE_SIZE])mlx_get_data_addr(t->w, &tp, &tp, &tp);

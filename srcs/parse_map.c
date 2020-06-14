@@ -18,6 +18,7 @@ void	set_map_size(t_cub *cub, int fd)
 		if (ft_strlen(line) == 0)
 		{
 			cub->line_n += 1;
+			free(line);
 			continue;
 		}
 		if (ft_strlen(line) > cub->map_w)
