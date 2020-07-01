@@ -6,7 +6,7 @@
 /*   By: hna <hna@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/23 04:04:51 by hna               #+#    #+#             */
-/*   Updated: 2020/07/01 20:21:53 by hna              ###   ########.fr       */
+/*   Updated: 2020/07/01 20:42:20 by hna              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@
 # define SPEED_MOVE 1
 # define SPEED_ROT 2
 
-# define MAX_SC_W 1920
+# define MAX_SC_W 2560
 # define MIN_SC_W 400
-# define MAX_SC_H 1080
+# define MAX_SC_H 1440
 # define MIN_SC_H 280
 
 # define BYTES_PER_PIXEL 3
