@@ -14,14 +14,19 @@ int		check_color(char *line, t_cub *cub, int *check)
 	return (1);
 }
 
-int		check_resolution(char *line, t_cub *cub, int *check)
+void	adjust_resolution(t_cub *cub)
 {
-	if (!(parse_resolution(line, cub, check)))
-		return (0);
 	if (cub->res_w > MAX_SC_W || cub->res_w < MIN_SC_W)
 		cub->res_w = (cub->res_w < MIN_SC_W) ? MIN_SC_W : MAX_SC_W;
 	if (cub->res_h > MAX_SC_H || cub->res_h < MIN_SC_H)
 		cub->res_h = (cub->res_h < MIN_SC_H) ? MIN_SC_H : MAX_SC_H;
+}
+
+int		check_resolution(char *line, t_cub *cub, int *check)
+{
+	if (!(parse_resolution(line, cub, check)))
+		return (0);
+	adjust_resolution(cub);
 	return (1);
 }
 
