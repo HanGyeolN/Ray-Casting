@@ -1,8 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sprite_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hna <hna@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/29 15:19:24 by hna               #+#    #+#             */
+/*   Updated: 2020/07/01 16:26:17 by hna              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "raycasting.h"
 
 void	sort_sprites(int *order, double *dist, int amount)
 {
-	int		i, j;
+	int		i;
+	int		j;
 	int		temp;
 	double	tp;
 
@@ -41,8 +54,10 @@ int		*get_sprite_order(t_scene *scene)
 	while (i < n_sprite)
 	{
 		sprite_order[i] = i;
-		sprite_distance[i] = (scene->player.pos_x - scene->sprite[i].x) * (scene->player.pos_x - scene->sprite[i].x);
-		sprite_distance[i] += (scene->player.pos_y - scene->sprite[i].y) * (scene->player.pos_y - scene->sprite[i].y);
+		sprite_distance[i] = (scene->player.pos_x - scene->sprite[i].x) * \
+							(scene->player.pos_x - scene->sprite[i].x);
+		sprite_distance[i] += (scene->player.pos_y - scene->sprite[i].y) * \
+							(scene->player.pos_y - scene->sprite[i].y);
 		i++;
 	}
 	sort_sprites(sprite_order, sprite_distance, n_sprite);

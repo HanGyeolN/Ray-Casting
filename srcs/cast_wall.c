@@ -1,58 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cast_wall.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hna <hna@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/01 16:03:33 by hna               #+#    #+#             */
+/*   Updated: 2020/07/01 16:14:48 by hna              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "raycasting.h"
-
-void	set_player_screen(t_scene *scene, int x)
-{
-	double		camera_x;
-	t_window	*win;
-	t_player	*p;
-
-	win = &(scene->window);
-	p = &(scene->player);
-	camera_x = 2 * x / win->width - 1;
-	p->rays[x].dir_x = p->dir_x + p->plane_x * camera_x;
-	p->rays[x].dir_y = p->dir_y + p->plane_y * camera_x;
-	p->rays[x].delta_dist_x = fabs(1 / p->rays[x].dir_x);
-	p->rays[x].delta_dist_y = fabs(1 / p->rays[x].dir_y);
-}
-
-void	set_side_distance(t_scene *scene, int x)
-{
-	t_player	*p;
-	t_ray		*r;
-
-	p = &(scene->player);
-	r = &(scene->player.rays[x]);
-	if (r->dir_x < 0)
-		r->side_dist_x = (p->pos_x - (int)p->pos_x) * r->delta_dist_x;
-	else
-		r->side_dist_x = ((int)p->pos_x + 1.0 - p->pos_x) * r->delta_dist_x;
-	if (r->dir_y < 0)
-		r->side_dist_y = (p->pos_y - (int)p->pos_y) * r->delta_dist_y;
-	else
-		r->side_dist_y = ((int)p->pos_y + 1.0 - p->pos_y) * r->delta_dist_y;
-}
-
-void	set_step_xy(t_scene *scene, int x)
-{
-	t_ray	*r;
-
-	r = &(scene->player.rays[x]);
-	if (r->dir_x < 0)
-		r->step_x = -1;
-	else
-		r->step_x = 1;
-	if (r->dir_y < 0)
-		r->step_y = -1;
-	else
-		r->step_y = 1;
-}
-
-void	set_wall_perp_distance(t_player *p, t_ray *r, int map_x, int map_y)
-{
-	r->perp_wall_dist = (r->side == 0) ? \
-			((map_x - p->pos_x + (1 - r->step_x) / 2) / r->dir_x) :
-			((map_y - p->pos_y + (1 - r->step_y) / 2) / r->dir_y);
-}
 
 void	set_wall_distance(t_player *p, t_ray *r, t_map *map)
 {
@@ -98,7 +56,7 @@ void	set_ray_distance(t_scene *scene, int x)
 	r->wall_x = (r->side == 0) ? \
 		(scene->player.pos_y + r->perp_wall_dist * r->dir_y) :
 		(scene->player.pos_x + r->perp_wall_dist * r->dir_x);
-	r->wall_x -= floor(r->wall_x);	
+	r->wall_x -= floor(r->wall_x);
 }
 
 void	set_ray_cardinal(t_scene *scene, int x)
@@ -114,46 +72,6 @@ void	set_ray_cardinal(t_scene *scene, int x)
 		ray->cardinal = 3;
 	else if (ray->side == 0 && ray->dir_x < 0)
 		ray->cardinal = 1;
-}
-
-int		get_color_by_cardinal(int cardinal, int x, int y, t_texture *t)
-{
-	int		color;
-
-	color = 0;
-	if (cardinal == 0)
-		color = t->n_data[y][x];
-	else if (cardinal == 1)
-		color = t->e_data[y][x];
-	else if (cardinal == 2)
-		color = t->s_data[y][x];
-	else if (cardinal == 3)
-		color = t->w_data[y][x];
-	return (color);
-}
-
-void	set_wall_texture(t_scene *scene, int x)
-{
-	int		y;
-	int		tex_x;
-	int		color;
-
-	tex_x = (int)(scene->player.rays[x].wall_x * (double)TEXTURE_W);
-	if (scene->player.rays[x].side == 0 && scene->player.rays[x].dir_x > 0)
-		tex_x = TEXTURE_W - tex_x - 1;
-	if (scene->player.rays[x].side == 1 && scene->player.rays[x].dir_y < 0)
-		tex_x = TEXTURE_W - tex_x - 1;
-	y = scene->player.rays[x].draw_s - 1;
-	while (++y < scene->player.rays[x].draw_e)
-	{
-		int		tex_y;
-		tex_y = y * 256 - (int)scene->window.height * 128 + scene->player.rays[x].line_h * 128;
-		tex_y = ((tex_y * TEXTURE_H) / scene->player.rays[x].line_h) / 256;
-		color = get_color_by_cardinal(scene->player.rays[x].cardinal, tex_x, tex_y, &scene->texture);
-		if (scene->player.rays[x].side == 1)
-			color = (color >> 1) & 8355711;
-		scene->window.img_data[y * (int)scene->window.width + (x)] = color;
-	}
 }
 
 void	set_fc_color(t_scene *scene, int x)

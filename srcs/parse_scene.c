@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_scene.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hna <hna@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/29 15:18:13 by hna               #+#    #+#             */
+/*   Updated: 2020/07/01 16:29:15 by hna              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "raycasting.h"
-#include "libftprintf.h"
 
 /*
 ** check keyword from .cub file
@@ -45,43 +56,11 @@ int		set_player(t_cub *cub)
 	return (0);
 }
 
-void	convert_space(t_cub *cub, int r, int c)
+int		check_sum(int check_sum)
 {
-	int		t;
-	int		check;
-
-	t = 1;
-	check = 0;
-	if (cub->map[r][c] == ' ')
-	{
-		while (c + t < cub->map_w && c - t >= 0)
-		{
-			if ((cub->map[r][c + t] != '1' && cub->map[r][c + t] != ' ') || (cub->map[r][c - t] != '1' && cub->map[r][c - t] != ' '))
-			{
-				cub->map[r][c] = '0';
-				check = 1;
-				break;
-			}
-			t++;
-		}
-		if (check == 0)
-			cub->map[r][c] = '1';
-	}
-}
-
-int		convert_map(t_cub *cub)
-{
-	int		r;
-	int		c;
-
-	r = -1;
-	while (++r < cub->map_h)
-	{
-		c = -1;
-		while (++c < cub->map_w)
-			convert_space(cub, r, c);
-	}
-	return (0);
+	if (check_sum != 0b11111111)
+		return (error("cub file error"));
+	return (1);
 }
 
 int		parse_scene(char *filepath, t_cub *cub)
@@ -94,7 +73,7 @@ int		parse_scene(char *filepath, t_cub *cub)
 	cub->line_n = 0;
 	fd = open(filepath, O_RDONLY);
 	if (fd <= 0)
-		return(error("file open error"));
+		return (error("file open error"));
 	while (get_next_line(fd, &line) > 0)
 	{
 		cub->line_n += 1;
@@ -110,7 +89,5 @@ int		parse_scene(char *filepath, t_cub *cub)
 	}
 	free(line);
 	close(fd);
-	if (check != 0b11111111)
-		return (error("cub file error"));
-	return (1);
+	return (check_sum(check));
 }

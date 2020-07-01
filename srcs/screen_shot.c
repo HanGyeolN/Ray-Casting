@@ -1,11 +1,18 @@
-#include <stdio.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   screen_shot.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hna <hna@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/29 15:19:18 by hna               #+#    #+#             */
+/*   Updated: 2020/07/01 16:32:39 by hna              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "raycasting.h"
 
-#define	BYTES_PER_PIXEL 3
-#define FILE_HEADER_SIZE 14
-#define INFO_HEADER_SIZE 40
-
-void	put_color_to_image(unsigned char *image, int color, int idx)
+void		put_color_to_image(unsigned char *image, int color, int idx)
 {
 	int		r;
 	int		g;
@@ -19,15 +26,16 @@ void	put_color_to_image(unsigned char *image, int color, int idx)
 	image[idx] = (unsigned char)b;
 }
 
-t_bitmap_file_header	*create_bitmap_file_header(int height, int width, int padding_size)
+t_bmp_fh	*create_bitmap_file_header(int height, int width, int padding_size)
 {
-	int file_size;
-	t_bitmap_file_header	*bfh;
+	int			file_size;
+	t_bmp_fh	*bfh;
 
-	file_size = FILE_HEADER_SIZE + INFO_HEADER_SIZE + (BYTES_PER_PIXEL * width + padding_size) * height;
-	if (!(bfh = malloc(sizeof(t_bitmap_file_header))))
+	file_size = FILE_HEADER_SIZE + INFO_HEADER_SIZE + \
+				(BYTES_PER_PIXEL * width + padding_size) * height;
+	if (!(bfh = malloc(sizeof(t_bmp_fh))))
 		return (0);
-	ft_memset(bfh, 0, sizeof(t_bitmap_file_header));
+	ft_memset(bfh, 0, sizeof(t_bmp_fh));
 	bfh->bf_type[0] = (unsigned char)('B');
 	bfh->bf_type[1] = (unsigned char)('M');
 	bfh->bf_size[0] = (unsigned char)(file_size);
@@ -38,13 +46,13 @@ t_bitmap_file_header	*create_bitmap_file_header(int height, int width, int paddi
 	return (bfh);
 }
 
-t_bitmap_info_header	*create_bitmap_info_header(int height, int width)
+t_bmp_ih	*create_bitmap_info_header(int height, int width)
 {
-	t_bitmap_info_header	*bih;
+	t_bmp_ih	*bih;
 
-	if (!(bih = malloc(sizeof(t_bitmap_info_header))))
+	if (!(bih = malloc(sizeof(t_bmp_ih))))
 		return (0);
-	ft_memset(bih, 0, sizeof(t_bitmap_info_header));
+	ft_memset(bih, 0, sizeof(t_bmp_ih));
 	bih->bi_size[0] = (unsigned char)(INFO_HEADER_SIZE);
 	bih->bi_width[0] = (unsigned char)(width);
 	bih->bi_width[1] = (unsigned char)(width >> 8);
@@ -59,12 +67,12 @@ t_bitmap_info_header	*create_bitmap_info_header(int height, int width)
 	return (bih);
 }
 
-void			generate_bitmap_image(unsigned char *image, int height, int width)
+void		generate_bitmap_image(unsigned char *image, int height, int width)
 {
-	int 			padding_size;
-	int				fd;
-	t_bitmap_file_header	*file_s_header;
-	t_bitmap_info_header	*info_s_header;
+	int			padding_size;
+	int			fd;
+	t_bmp_fh	*file_s_header;
+	t_bmp_ih	*info_s_header;
 
 	padding_size = (4 - (width * BYTES_PER_PIXEL) % 4) % 4;
 	fd = open("bitmapImage.bmp", O_WRONLY | O_CREAT, 0777);
@@ -78,7 +86,7 @@ void			generate_bitmap_image(unsigned char *image, int height, int width)
 	close(fd);
 }
 
-int				image_to_bmp(int height, int width, int *img_data)
+int			image_to_bmp(int height, int width, int *img_data)
 {
 	int				i;
 	int				j;
@@ -86,7 +94,7 @@ int				image_to_bmp(int height, int width, int *img_data)
 	unsigned char	*image;
 
 	if (!(image = malloc(sizeof(char) * (height * width * BYTES_PER_PIXEL))))
-		return(0);
+		return (0);
 	i = -1;
 	while (++i < height)
 	{

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_map.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hna <hna@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/29 15:17:56 by hna               #+#    #+#             */
+/*   Updated: 2020/07/01 19:22:27 by hna              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "raycasting.h"
 
 void	free_map(char **map, int map_h)
@@ -26,6 +38,8 @@ void	set_map_size(t_cub *cub, int fd)
 		(cub->map_h)++;
 		free(line);
 	}
+	if (ft_strlen(line) > cub->map_w)
+		cub->map_w = ft_strlen(line);
 	free(line);
 	(cub->map_h)++;
 }
@@ -54,19 +68,12 @@ char	**malloc_map(char **map, int fd, t_cub *cub)
 	return (map);
 }
 
-char	**parse_map(int fd, t_cub *cub, char *filename)
+void	skip_and_copy_map(int fd, t_cub *cub)
 {
 	int		i;
 	char	*line;
 
-	if (!(cub->map = malloc_map(cub->map, fd, cub)))
-	{
-		close(fd);
-		return (0);
-	}
-	close(fd);
 	i = -1;
-	fd = open(filename, O_RDONLY);
 	while (++i < cub->line_n)
 	{
 		get_next_line(fd, &line);
@@ -81,6 +88,18 @@ char	**parse_map(int fd, t_cub *cub, char *filename)
 	}
 	ft_strncpy(cub->map[i], line, ft_strlen(line));
 	free(line);
+}
+
+char	**parse_map(int fd, t_cub *cub, char *filename)
+{
+	if (!(cub->map = malloc_map(cub->map, fd, cub)))
+	{
+		close(fd);
+		return (0);
+	}
+	close(fd);
+	fd = open(filename, O_RDONLY);
+	skip_and_copy_map(fd, cub);
 	close(fd);
 	return (cub->map);
 }
